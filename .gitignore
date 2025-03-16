@@ -1,0 +1,18 @@
+# Ignore the virtual environment
+venv/
+
+# Ignore Python cache
+__pycache__/
+
+# Ignore macOS junk files
+.DS_Store
+
+# Ignore large CSV files (except a sample one)
+data/*.csv
+!data/sample_promotion_points.csv  # Keep a small test file
+
+
+git add .
+git commit -m "Added .gitignore file"
+git push origin main
+
