@@ -1,4 +1,4 @@
-# Ignore data files (only keep final master dataset)
+# Ignore raw data files (only keep the final master dataset)
 data/pdfs/
 data/txt/
 data/csv/
@@ -10,3 +10,10 @@ data/csv/
 # Ignore virtual environments
 .venv/
 __pycache__/
+*.log  # Ignore log files
+*.tmp  # Ignore temporary files
+.DS_Store  # Ignore macOS system files
+Thumbs.db  # Ignore Windows system files
+
+# Ignore environment variables and secrets (if you ever add them)
+.env
