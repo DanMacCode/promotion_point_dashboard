@@ -2,7 +2,7 @@
 data/pdfs/
 data/txt/
 data/csv/
-
+GITHUB_TOKEN.env
 # Keep only the master dataset
 !data/master/
 !data/master/master_promotion_data.csv
