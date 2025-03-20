@@ -477,4 +477,4 @@ def update_sidebar(load_clicks, start_month, end_month, component, rank, mos):
 
 # ✅ Start Dash Server
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run(debug=True)

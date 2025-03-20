@@ -5,17 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b373051f-5357-49d9-b0f7-7545ba4ffdb5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/GITHUB_TOKEN.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dashboard_scripts/app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dashboard_scripts/bayesian_adjustment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dashboard_scripts/debugging.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dashboard_scripts/predict_next_promotion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dashboard_scripts/predict_next_promotion_points.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dashboard_scripts/test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dashboard_scripts/update_change_graph.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashboard_scripts/app.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/start.sh" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,25 +40,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.app.executor": "Run",
-    "Python.cleanup_old_txts.executor": "Run",
-    "Python.compile_master_dataset.executor": "Run",
-    "Python.debug.executor": "Run",
-    "Python.debugging.executor": "Run",
-    "Python.fixed_test.executor": "Run",
-    "Python.pdf_to_txt.executor": "Run",
-    "Python.rename_pdfs.executor": "Run",
-    "Python.rename_txts.executor": "Run",
-    "Python.scrape_pdfs.executor": "Run",
-    "Python.test.executor": "Run",
-    "Python.txt_to_csv.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python.app.executor&quot;: &quot;Run&quot;,
+    &quot;Python.cleanup_old_txts.executor&quot;: &quot;Run&quot;,
+    &quot;Python.compile_master_dataset.executor&quot;: &quot;Run&quot;,
+    &quot;Python.debug.executor&quot;: &quot;Run&quot;,
+    &quot;Python.debugging.executor&quot;: &quot;Run&quot;,
+    &quot;Python.fixed_test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.pdf_to_txt.executor&quot;: &quot;Run&quot;,
+    &quot;Python.rename_pdfs.executor&quot;: &quot;Run&quot;,
+    &quot;Python.rename_txts.executor&quot;: &quot;Run&quot;,
+    &quot;Python.scrape_pdfs.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.txt_to_csv.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Python.test">
+}</component>
+  <component name="RunManager" selected="Python.app">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="promotion_point_dashboard" />
       <option name="ENV_FILES" value="" />
@@ -155,8 +150,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test" />
         <item itemvalue="Python.app" />
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.fixed_test" />
         <item itemvalue="Python.debugging" />
       </list>

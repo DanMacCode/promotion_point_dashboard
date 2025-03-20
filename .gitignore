@@ -17,3 +17,4 @@ Thumbs.db  # Ignore Windows system files
 
 # Ignore environment variables and secrets (if you ever add them)
 .env
+.vercel

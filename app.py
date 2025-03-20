@@ -386,10 +386,10 @@ def update_graphs(load_clicks, clear_clicks, start_month, end_month, component, 
     ))
     # ✅ Define the Prediction Text for Next Month's Promotion Points
     # ✅ Define the Prediction Text for Next Month's Promotion Points
-    if adjusted_probability is not None and total_months > 0:
+    if predicted_promotion_points is not None:
         prediction_text = html.Div([
-            html.H4("Next Month's Prediction", style={"textAlign": "center"}),
-            html.P(f"Predicted Promotion Probability: {adjusted_probability:.1f}%",
+            html.H4("Next Month's Predicted Cutoff", style={"textAlign": "center"}),
+            html.P(f"Predicted Promotion Points: {predicted_promotion_points}",
                    style={"fontSize": "16px", "textAlign": "center", "color": "blue"})
         ], style={
             "border": "1px solid #ddd",
@@ -477,4 +477,5 @@ def update_sidebar(load_clicks, start_month, end_month, component, rank, mos):
 
 # ✅ Start Dash Server
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run(debug=True)
+
