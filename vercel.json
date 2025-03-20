@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "dashboard_scripts/app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "dashboard_scripts/app.py"
+    }
+  ],
+  "functions": {
+    "dashboard_scripts/*.py": {
+      "runtime": "python3.9",
+      "memory": 128
+    }
+  }
+}
