@@ -85,3 +85,4 @@ webencodings==0.5.1
 websocket-client==1.8.0
 gunicorn
 dash==2.14.2
+python-dotenv==1.0.0
