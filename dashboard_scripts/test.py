@@ -19,9 +19,9 @@ from dashboard_scripts.predict_next_promotion import predict_next_promotion_poin
 
 
 # ✅ Initialize Dash app
-app = dash.Dash(__name__, external_stylesheets=[
-    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-])
+app = dash.Dash(__name__, external_stylesheets=["https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/cosmo/bootstrap.min.css"])
+
+
 server = app.server
 
 # ✅ Public direct raw GitHub link
@@ -42,7 +42,8 @@ sorted_dates = df["Date"].dropna().sort_values().dt.strftime("%b-%Y").unique().t
 
 app.layout = html.Div([
     # ✅ Dashboard Title
-    html.H1("Army Promotion Point Dashboard", style={"textAlign": "center", "color": "gold"}),
+    html.H1("Army Promotion Point Dashboard", style={"textAlign": "center", "color": "gold"}, className="text-center fw-bold mt-3 mb-3")
+,
 
     # ✅ Dropdowns & Controls
     html.Div([
@@ -121,19 +122,54 @@ app.layout = html.Div([
                 "padding": "5px",
                 "borderRadius": "5px",
                 "boxShadow": "0px 0px 5px rgba(0,0,0,0.3)"
-            }),
-            html.Div(id="prediction-text")
-        ], style={"position": "relative"}),
+            })
+
+        ], style={"position": "relative","border": "1px solid #ddd",
+                "borderRadius": "10px",
+                "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)",
+                "padding": "15px",
+                "backgroundColor": "#ffffff",
+                "marginBottom": "20px"}),
+
+    html.Div(id="prediction-text"),
     # ✅ Promotion Probability (Top Row)
-    html.Div([
-        dcc.Graph(id="historical-probability-gauge", style={"width": "45%", "display": "inline-block"}),
-        dcc.Graph(id="predicted-probability-gauge", style={"width": "45%", "display": "inline-block"})
-    ], style={"display": "flex", "justifyContent": "center", "gap": "20px", "marginBottom": "20px"}),
+        html.Div([
+            html.Div([
+                dcc.Graph(id="historical-probability-gauge", style={"width": "100%"})
+            ], style={
+                "border": "1px solid #ddd",
+                "borderRadius": "10px",
+                "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)",
+                "padding": "15px",
+                "backgroundColor": "#ffffff",
+                "marginBottom": "20px",
+                "marginTop": "20px"
+            }),
+
+            html.Div([
+                dcc.Graph(id="predicted-probability-gauge", style={"width": "100%"})
+            ], style={
+                "border": "1px solid #ddd",
+                "borderRadius": "10px",
+                "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)",
+                "padding": "15px",
+                "backgroundColor": "#ffffff",
+                "marginBottom": "20px",
+                "marginTop": "20px"
+            })
+        ], style={"display": "flex", "justifyContent": "center", "gap": "20px"})
+        ,
 
         # ✅ Historical Point Fluctuation (Middle Row)
-    dcc.Graph(id="change-graph", style={"width": "100%"})
+    dcc.Graph(id="change-graph", style={"width": "100%","border": "1px solid #ddd",
+                "borderRadius": "10px",
+                "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)",
+                "padding": "15px",
+                "backgroundColor": "#ffffff",
+                "marginBottom": "20px"})
 
-    ], style={"marginLeft": "2in", "marginRight": "2in", "marginBottom": "20px"}),
+    ], style={"marginLeft": "2in", "marginRight": "2in", "marginBottom": "20px",
+                }),
 
         # ✅ Competitiveness + Historical Soldier Selection + Details (Bottom Row)
         html.Div([
@@ -144,29 +180,78 @@ app.layout = html.Div([
                     "A higher score indicates a less competitive MOS with more promotions relative to those eligible.",
                     style={"textAlign": "center", "fontSize": "14px", "marginTop": "5px"}
                 )
-            ], style={"width": "35%", "display": "inline-block"}),  # 🔹 Competitiveness Score (LEFT)
+            ], style={"width": "35%", "display": "inline-block",
+                        "border": "1px solid #ddd",  # Light gray border
+                        "borderRadius": "10px",  # Rounded edges
+                        "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)",  # Soft shadow
+                        "padding": "15px",  # Padding inside the box
+                        "backgroundColor": "#ffffff",  # White background
+                        "marginBottom": "20px"}),  # 🔹 Competitiveness Score (LEFT)
 
         html.Div([
             dcc.Graph(id="streamgraph")
-        ], style={"width": "40%", "display": "inline-block", "verticalAlign": "top"}),  # 🔹 Historical Soldier Selection (CENTER)
+        ], style={"width": "40%", "display": "inline-block", "verticalAlign": "top",
+                    "border": "1px solid #ddd",  # Light gray border
+                    "borderRadius": "10px",  # Rounded edges
+                    "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)",  # Soft shadow
+                    "padding": "15px",  # Padding inside the box
+                    "backgroundColor": "#ffffff",  # White background
+                    "marginBottom": "20px"}),  # 🔹 Historical Soldier Selection (CENTER)
 
         html.Div([
             html.H4("Details", style={"textAlign": "center"}),
-            html.Table(id="sidebar-details", style={
+            html.Div([
+                html.Div(id="sidebar-details", style={
+                    "maxHeight": "400px",
+                    "overflowY": "auto",
+                    "width": "100%",
+                    "border": "1px solid #ddd",
+                    "padding": "0px",
+                    "borderRadius": "5px",
+                    "backgroundColor": "#f8f8f8",
+                    "marginTop": "0px"
+                })
+            ], style={
                 "width": "100%",
-                "borderCollapse": "collapse",
-                "maxHeight": "400px",
-                "display": "block"
+                "display": "inline-block",
+                "verticalAlign": "top",
+                "border": "1px solid #ddd",  # Light gray border
+                    "borderRadius": "10px",  # Rounded edges
+                    "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)",  # Soft shadow
+                    "padding": "15px",  # Padding inside the box
+                    "backgroundColor": "#ffffff",  # White background
+                    "marginBottom": "20px"
             })
-        ], style={
-            "maxHeight": "400px",
-            "overflowY": "auto",
-            "width": "24%", "display": "inline-block", "verticalAlign": "top",
-            "border": "1px solid #ddd", "padding": "10px", "borderRadius": "5px",
-            "backgroundColor": "#f8f8f8"
-        })  # 🔹 Details Box (RIGHT)
-    ], style={"display": "flex", "justifyContent": "space-between", "marginBottom": "20px"})
-])
+
+        ])  # 🔹 Details Box (RIGHT)
+    ], style={"display": "flex", "justifyContent": "space-between", "marginBottom": "20px", "marginLeft": "2in", "marginRight": "2in"}),
+
+    html.Div(style={"flex": "1"}),
+
+    html.Footer(               # <- Put this at the end
+            children=[
+                html.Hr(),
+                html.Div([
+                    html.P("This Page Is NOT DoD Affiliated. I am just an NCO who got tired of remaking excels to speculate about points.", className="mb-0"),
+                    html.P("Contact: PromotionPointDashboard@gmail.com", className="mb-0"),
+                    html.P("© 2025 Army Promotion Point Dashboard", className="mb-0"),
+                ], className="text-center"),
+                html.Div(style={"height": "40px"})
+            ],
+            style={
+                "backgroundColor": "#013220",
+                "color": "yellow",
+                "padding": "0px",
+                "width": "100%",  # Ensure full width
+                "position": "absolute",
+                "position": "relative",  # Keeps it below content naturally
+                "marginTop": "auto",  # Stick to bottom
+                "bottom": "0",  # Anchor to bottom
+                "left": "0"  # Ensure it starts from the left edge
+            }
+        )
+
+], style={"minHeight": "100vh", "display": "flex", "flexDirection": "column"})
 
 # ✅ Now define your callbacks
 @app.callback(
@@ -261,7 +346,8 @@ def update_graphs(load_clicks, clear_clicks, start_month, end_month, component, 
             "backgroundColor": "#f8f8f8",
             "width": "300px",
             "margin": "auto",
-            "marginTop": "10px"
+            "marginTop": "10px",
+            "marginBottom": "10px"
         })
     else:
         prediction_text = html.P("Not enough data for prediction.", style={
@@ -431,50 +517,80 @@ def update_sidebar(load_clicks, start_month, end_month, component, rank, mos):
     filtered_df = df.copy()
     filtered_df["Date"] = pd.to_datetime(filtered_df["Date"], format="%Y-%b", errors="coerce")
 
-    # Ensure start and end month are converted properly before filtering
     start_month = pd.to_datetime(start_month, format="%b-%Y", errors="coerce")
     end_month = pd.to_datetime(end_month, format="%b-%Y", errors="coerce")
 
-    # Apply correct date filtering
     filtered_df = filtered_df[
         (filtered_df["Date"] >= start_month) & (filtered_df["Date"] <= end_month)
-        ]
+    ]
 
     if component:
-        print(f"Before filtering by Component {component}: {filtered_df.shape}")
         filtered_df = filtered_df[filtered_df["Component"].str.upper() == component.upper()]
-        print(f"After filtering by Component {component}: {filtered_df.shape}")
 
     if mos:
-        print(f"Before filtering by MOS {mos}: {filtered_df.shape}")
         filtered_df = filtered_df[filtered_df["MOS"] == mos]
-        print(f"After filtering by MOS {mos}: {filtered_df.shape}")
 
     if filtered_df.empty:
         return html.P("No Data Available")
 
-    promotion_column = "Cutoff_SGT" if rank == "SGT" else "Cutoff_SSG"
     eligibles_column = "Eligibles_SGT" if rank == "SGT" else "Eligibles_SSG"
     promotions_column = "Promotions_SGT" if rank == "SGT" else "Promotions_SSG"
 
-    # ✅ Create a scrollable table instead of plain text
-    table_header = [
-        html.Thead(html.Tr([
-            html.Th("Date"), html.Th("Eligible"), html.Th("Promotions")
-        ]))
-    ]
+    # Clearly defined table header
+    table_header = html.Thead(html.Tr([
+        html.Th("Date", style={
+            "position": "sticky",
+            "top": 0,
+            "backgroundColor": "#f8f8f8",
+            "zIndex": 2,
+            "padding": "0px",
+            "margin": "0",
+            "textAlign": "left",
 
-    table_body = [
+        }),
+        html.Th("Eligible", style={
+            "position": "sticky",
+            "top": 0,
+            "backgroundColor": "#f8f8f8",
+            "zIndex": 2,
+            "padding": "0px",
+            "margin": "0",
+            "textAlign": "center",
+
+        }),
+        html.Th("Promotions", style={
+            "position": "sticky",
+            "top": 0,
+            "backgroundColor": "#f8f8f8",
+            "zIndex": 2,
+            "padding": "0px",
+            "margin": "0",
+            "textAlign": "center",
+
+        }),
+    ]))
+
+    # Clearly defined table rows
+    table_rows = html.Tbody([
         html.Tr([
-            html.Td(pd.to_datetime(row["Date"]).strftime("%b-%Y")),  # Converts to MMM-YYYY format
+            html.Td(row["Date"].strftime("%b-%Y")),
             html.Td(int(row[eligibles_column]) if pd.notna(row[eligibles_column]) else "N/A"),
             html.Td(int(row[promotions_column]) if pd.notna(row[promotions_column]) else "N/A")
-        ])
-        for _, row in filtered_df.iterrows()
-    ]
+        ]) for _, row in filtered_df.sort_values(by="Date").iterrows()
+    ])
+
+    # Return the complete table directly (without extra [])
+    return html.Table([table_header, table_rows], style={"width": "100%", "borderCollapse": "collapse", "margin":"0", "padding": "0"})
+
+
+
 
     return html.Table(table_header + [html.Tbody(table_body)], style={"width": "100%"})
+
+
+
 
 # ✅ Start Dash Server
 if __name__ == "__main__":
     app.run(debug=True)
+
