@@ -374,7 +374,10 @@ def clear_inputs(n_clicks):
     ],
     [
         Input("load-button", "n_clicks"),
-        Input("user-points", "value"),  # Optional: for real-time gauge updates
+        Input("user-points", "value"),
+        Input("trendline-checkbox", "value"),
+        Input("volatility-checkbox", "value"),
+        Input("toggle-probability", "value"),
     ],
     [
         State("date-range-start", "value"),
@@ -382,17 +385,15 @@ def clear_inputs(n_clicks):
         State("component-dropdown", "value"),
         State("rank-dropdown", "value"),
         State("mos-dropdown", "value"),
-        State("trendline-checkbox", "value"),
-        State("volatility-checkbox", "value"),
-        State("toggle-probability", "value"),
     ],
+
     prevent_initial_call=True
 )
 
 
 
 
-def update_graphs(n_clicks, user_points, start_month, end_month, component, rank, mos, trendline, volatility, toggle_probability):
+def update_graphs(n_clicks, user_points, trendline, volatility, toggle_probability, start_month, end_month, component, rank, mos):
     ctx = dash.callback_context
     triggered_id = ctx.triggered_id
 
