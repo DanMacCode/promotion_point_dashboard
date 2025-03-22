@@ -472,8 +472,16 @@ def update_graphs(n_clicks, user_points, trendline, volatility, toggle_probabili
         })
 
     # ✅ Create Promotion Graph
-    fig1 = px.line(filtered_df, x="Date", y=promotion_column, title="Promotion Points Over Time", markers=True,color_discrete_sequence=["green"],
-                   )
+    fig1 = px.line(
+        filtered_df,
+        x="Date",
+        y=promotion_column,
+        title="Promotion Points Over Time",
+        markers=True,
+        color_discrete_sequence=["green"],
+        labels={promotion_column: "MOS Cutoffs"}
+    )
+    fig1.update_traces(name="MOS Cutoff Points", showlegend=True)
 
     # ✅ Add Trend Line if selected
     if "trend" in trendline:
