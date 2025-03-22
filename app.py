@@ -153,7 +153,7 @@ app.layout = html.Div([
         html.Div([
             html.H5("Coming Soon:"),
             html.Ul(
-                [html.Li(line.strip()) for line in coming_soon_text.splitlines() if line.strip()],
+                [html.Li(line.strip().lstrip("-").strip()) for line in coming_soon_text.splitlines() if line.strip()],
                 id="updates-box",
                 style={"fontSize": "14px", "lineHeight": "1.6", "margin": "0", "paddingLeft": "20px"}
             )
