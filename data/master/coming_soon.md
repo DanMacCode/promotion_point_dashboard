@@ -1,3 +1,12 @@
--test
--test 2
--test3
+Dark Mode
+Improved Bayesian Weighting
+Improved Graphic Design
+Percentages of Soldiers promoted over your selected date range
+Confidence Intervals for predictions
+Automated Monthly Data Scraping to ensure the site is up to date each month
+
+
+
+
+Have Suggestions? 
+Email: PromotionPointDashboard.com
