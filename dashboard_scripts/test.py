@@ -6,17 +6,19 @@ import requests
 import pandas as pd
 import os
 from dotenv import load_dotenv
+from dash.dependencies import Input, Output, State
 import plotly.graph_objects as go
 from dash.dependencies import Input, Output
 from dashboard_scripts.update_change_graph import create_change_graph
 from dashboard_scripts.bayesian_adjustment import compute_bayesian_promotion_probability
 from dashboard_scripts.predict_next_promotion import predict_next_promotion_points
 
-
-
-
-
-
+# ✅ Load 'Coming Soon' content from GitHub
+coming_soon_url = "https://raw.githubusercontent.com/DanMacCode/promotion_point_dashboard/refs/heads/main/data/master/coming_soon.md"
+try:
+    coming_soon_text = requests.get(coming_soon_url).text
+except:
+    coming_soon_text = "Failed to load upcoming changes."
 
 # ✅ Initialize Dash app
 app = dash.Dash(__name__, external_stylesheets=["https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/cosmo/bootstrap.min.css"])
@@ -47,53 +49,68 @@ app.layout = html.Div([
 
     # ✅ Dropdowns & Controls
     html.Div([
-        dcc.Dropdown(id="date-range-start",
-                     options=[{"label": d, "value": d} for d in sorted_dates],
-                     placeholder="Select Start Month",
-                     style={"width": "200px", "fontSize": "16px", "textAlign": "center"}),
+        html.Div([
+            html.P("Load Data From:", style={"marginBottom": "2px", "fontWeight": "bold", "textAlign": "center"}),
+            dcc.Dropdown(id="date-range-start",
+                         options=[{"label": d, "value": d} for d in sorted_dates],
+                         placeholder="Select Start Month",
+                         style={"width": "200px", "fontSize": "16px", "textAlign": "center"})
+        ]),
+        html.Div([
+            html.P("Load Data To:", style={"marginBottom": "2px", "fontWeight": "bold", "textAlign": "center"}),
+            dcc.Dropdown(id="date-range-end",
+                         options=[{"label": d, "value": d} for d in sorted_dates],
+                         placeholder="Select End Month",
+                         style={"width": "200px", "fontSize": "16px", "textAlign": "center"})
+        ]),
+        html.Div([
+            html.P("Component:", style={"marginBottom": "2px", "fontWeight": "bold", "textAlign": "center"}),
+            dcc.Dropdown(id="component-dropdown",
+                         options=[{"label": "Active", "value": "Active"}, {"label": "Reserve", "value": "Reserve"}],
+                         placeholder="Select Component",
+                         style={"width": "200px", "fontSize": "16px", "textAlign": "center"})
+        ]),
+        html.Div([
+            html.P("Cutoff Scores For:", style={"marginBottom": "2px", "fontWeight": "bold", "textAlign": "center"}),
+            dcc.Dropdown(id="rank-dropdown",
+                         options=[{"label": "SGT", "value": "SGT"}, {"label": "SSG", "value": "SSG"}],
+                         placeholder="Select Rank",
+                         style={"width": "150px", "fontSize": "16px", "textAlign": "center"})
+        ]),
+        html.Div([
+            html.P("MOS Code:", style={"marginBottom": "2px", "fontWeight": "bold", "textAlign": "center"}),
+            dcc.Dropdown(id="mos-dropdown",
+                         options=[{"label": mos, "value": mos} for mos in df["MOS"].unique()],
+                         placeholder="Select MOS",
+                         style={"width": "150px", "fontSize": "16px", "textAlign": "center"})
+        ]),
+        html.Div([
+            html.Button("Load Data", id="load-button",
+                        style={"backgroundColor": "green", "color": "white", "padding": "10px", "fontSize": "14px"}),
+            html.Button("Clear Data", id="clear-button",
+                        style={"backgroundColor": "gray", "color": "white", "padding": "10px", "fontSize": "14px",
+                               "marginLeft": "5px"})
+        ], style={"display": "flex", "flexDirection": "row", "alignItems": "center", "justifyContent": "center",
+                  "gap": "5px", "marginTop": "15px"})
+    ], style={"display": "flex", "justifyContent": "space-around", "gap": "10px", "padding": "10px",
+              "flexWrap": "wrap"}),
 
-        dcc.Dropdown(id="date-range-end",
-                     options=[{"label": d, "value": d} for d in sorted_dates],
-                     placeholder="Select End Month",
-                     style={"width": "200px", "fontSize": "16px", "textAlign": "center"}),
-
-        dcc.Dropdown(id="component-dropdown",
-                     options=[{"label": "Active", "value": "Active"}, {"label": "Reserve", "value": "Reserve"}],
-                     placeholder="Select Component",
-                     style={"width": "200px", "fontSize": "16px", "textAlign": "center"}),
-
-        dcc.Dropdown(id="rank-dropdown",
-                     options=[{"label": "SGT", "value": "SGT"}, {"label": "SSG", "value": "SSG"}],
-                     placeholder="Select Rank",
-                     style={"width": "150px", "fontSize": "16px", "textAlign": "center"}),
-
-        dcc.Dropdown(id="mos-dropdown",
-                     options=[{"label": mos, "value": mos} for mos in df["MOS"].unique()],
-                     placeholder="Select MOS",
-                     style={"width": "150px", "fontSize": "16px", "textAlign": "center"}),
-
-        html.Button("Load Data", id="load-button",
-                    style={"backgroundColor": "green", "color": "white", "padding": "10px", "fontSize": "14px"}),
-
-        html.Button("Clear Data", id="clear-button",
-                    style={"backgroundColor": "gray", "color": "white", "padding": "10px", "fontSize": "14px"})
-    ], style={"display": "flex", "justifyContent": "space-around", "gap": "10px", "padding": "10px"}),
 
     # ✅ Probability Statement
     html.Div([
         html.P("See where you measure up. Input your promotion points:"),
-        dcc.Input(id='user-points', type='number', min=0, max=800, step=1, style={'marginBottom': '10px'}),
-        html.Div(id='probability-text', style={'fontSize': '18px', 'marginTop': '10px'})
+        dcc.Input(id='user-points', type='number', min=0, max=800, step=1, style={'marginBottom': '10px'})
     ], style={"textAlign": "center", "marginBottom": "20px"}),
 
 
 
     # ✅ Promotion Points Over Time Graph (Below Probability)
     html.Div([
+        # 🔹 Promotion Graph Container
         html.Div([
             dcc.Graph(id="promotion-graph", style={"position": "relative"}),
 
-            # ✅ Floating Checkboxes (Bottom Right)
+            # ✅ Floating checkboxes INSIDE graph container
             html.Div([
                 dcc.Checklist(
                     id="toggle-probability",
@@ -113,70 +130,136 @@ app.layout = html.Div([
                     value=[],
                     style={"fontSize": "10px", "lineHeight": "12px"}
                 )
-
             ], style={
                 "position": "absolute",
                 "bottom": "0px",
-                "right": "05px",
+                "right": "5px",
                 "backgroundColor": "rgba(255,255,255,0.8)",
                 "padding": "5px",
                 "borderRadius": "5px",
                 "boxShadow": "0px 0px 5px rgba(0,0,0,0.3)"
             })
+        ], style={
+            "width": "78%",
+            "border": "1px solid #ddd",
+            "borderRadius": "10px",
+            "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)",
+            "padding": "15px",
+            "backgroundColor": "#ffffff",
+            "position": "relative"
+        }),
 
-        ], style={"position": "relative","border": "1px solid #ddd",
-                "borderRadius": "10px",
-                "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)",
-                "padding": "15px",
-                "backgroundColor": "#ffffff",
-                "marginBottom": "20px"}),
+        # 🔹 Coming Soon Box
+        html.Div([
+            html.H5("Coming Soon:"),
+            html.Ul(
+                [html.Li(line.strip()) for line in coming_soon_text.splitlines() if line.strip()],
+                id="updates-box",
+                style={"fontSize": "14px", "lineHeight": "1.6", "margin": "0", "paddingLeft": "20px"}
+            )
+
+        ], style={
+            "width": "20%",
+            "border": "1px solid #ddd",
+            "borderRadius": "10px",
+            "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)",
+            "padding": "15px",
+            "backgroundColor": "#f8f9fa",
+            "marginLeft": "2%",
+            "height": "100%"
+        })
+    ], style={
+        "display": "flex",
+        "justifyContent": "space-between",
+        "marginBottom": "20px",
+        "marginLeft": "2in",
+        "marginRight": "2in"
+    })
+    ,
+
+
+
 
     html.Div(id="prediction-text"),
     # ✅ Promotion Probability (Top Row)
+        # Container holding both cards
+    html.Div([
         html.Div([
+            # Gauge 1
             html.Div([
-                dcc.Graph(id="historical-probability-gauge", style={"width": "100%"})
+                dcc.Graph(id="historical-probability-gauge", style={"width": "100%", "height": "230px"}),
+                html.Div(id='probability-text', style={
+                    "fontSize": "16px",
+                    "color": "green",
+                    "textAlign": "center",
+                    "lineHeight": "1.5",
+                    "padding": "0 10px",
+                }),
             ], style={
+                "width": "48%",
                 "border": "1px solid #ddd",
                 "borderRadius": "10px",
                 "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)",
                 "padding": "15px",
                 "backgroundColor": "#ffffff",
-                "marginBottom": "20px",
-                "marginTop": "20px"
             }),
 
+            # Gauge 2
             html.Div([
-                dcc.Graph(id="predicted-probability-gauge", style={"width": "100%"})
+                dcc.Graph(id="predicted-probability-gauge", style={"width": "100%", "height": "230px"}),
+                html.P(
+                    "Bayesian Probability adjusts for volatility by down-weighting months with large jumps "
+                    "in promotion points. It calculates your historical chance, then penalizes it based on "
+                    "your MOS's unpredictability.",
+                    style={"textAlign": "center", "fontSize": "14px"}
+                )
             ], style={
+                "width": "48%",
                 "border": "1px solid #ddd",
                 "borderRadius": "10px",
                 "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)",
                 "padding": "15px",
                 "backgroundColor": "#ffffff",
-                "marginBottom": "20px",
-                "marginTop": "20px"
-            })
-        ], style={"display": "flex", "justifyContent": "center", "gap": "20px"})
-        ,
+            }),
+        ], style={
+            "display": "flex",
+            "justifyContent": "space-between",
+            "gap": "4%",
+            "flexWrap": "nowrap"
+        })
+    ], style={
+        "marginLeft": "2in",
+        "marginRight": "2in",
+        "marginTop": "40px",
+        "marginBottom": "40px"
+    })
+
+    ,
 
         # ✅ Historical Point Fluctuation (Middle Row)
-    dcc.Graph(id="change-graph", style={"width": "100%","border": "1px solid #ddd",
-                "borderRadius": "10px",
-                "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)",
-                "padding": "15px",
-                "backgroundColor": "#ffffff",
-                "marginBottom": "20px"})
+    # ✅ Historical Point Fluctuation (Middle Row)
+    html.Div([
+        dcc.Graph(id="change-graph", style={
+            "width": "100%",
+            "border": "1px solid #ddd",
+            "borderRadius": "10px",
+            "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)",
+            "padding": "15px",
+            "backgroundColor": "#ffffff",
+            "marginBottom": "20px"
+        })
+    ], style={
+        "marginLeft": "2in",
+        "marginRight": "2in",
+        "marginBottom": "20px"
+    }),
 
-    ], style={"marginLeft": "2in", "marginRight": "2in", "marginBottom": "20px",
-                }),
-
-        # ✅ Competitiveness + Historical Soldier Selection + Details (Bottom Row)
+    # ✅ Competitiveness + Historical Soldier Selection + Details (Bottom Row)
         html.Div([
             html.Div([
                 dcc.Graph(id="competitiveness-graph"),
                 html.P(
-                    "This chart shows the ratio of promotions to eligible soldiers. "
+                    "This graph shows the ratio of promotions to eligible soldiers. "
                     "A higher score indicates a less competitive MOS with more promotions relative to those eligible.",
                     style={"textAlign": "center", "fontSize": "14px", "marginTop": "5px"}
                 )
@@ -189,7 +272,11 @@ app.layout = html.Div([
                         "marginBottom": "20px"}),  # 🔹 Competitiveness Score (LEFT)
 
         html.Div([
-            dcc.Graph(id="streamgraph")
+            dcc.Graph(id="streamgraph"), html.P(
+                    "Visualize the population of those eligible for promotion "
+                "versus those selected for promotion.",
+                    style={"textAlign": "center", "fontSize": "14px", "marginTop": "5px"}
+                )
         ], style={"width": "40%", "display": "inline-block", "verticalAlign": "top",
                     "border": "1px solid #ddd",  # Light gray border
                     "borderRadius": "10px",  # Rounded edges
@@ -253,6 +340,26 @@ app.layout = html.Div([
 
 ], style={"minHeight": "100vh", "display": "flex", "flexDirection": "column"})
 
+# ✅ Callback to reset dropdowns when Clear button is clicked
+@app.callback(
+    [
+        Output("date-range-start", "value"),
+        Output("date-range-end", "value"),
+        Output("component-dropdown", "value"),
+        Output("rank-dropdown", "value"),
+        Output("mos-dropdown", "value"),
+        Output("user-points", "value"),
+        Output("trendline-checkbox", "value"),
+        Output("volatility-checkbox", "value"),
+        Output("toggle-probability", "value"),
+    ],
+    Input("clear-button", "n_clicks"),
+    prevent_initial_call=True
+)
+def clear_inputs(n_clicks):
+    return None, None, None, None, None, None, [], [], ["show"]
+
+
 # ✅ Now define your callbacks
 @app.callback(
     [
@@ -267,28 +374,37 @@ app.layout = html.Div([
     ],
     [
         Input("load-button", "n_clicks"),
-        Input("clear-button", "n_clicks"),
-        Input("date-range-start", "value"),
-        Input("date-range-end", "value"),
-        Input("component-dropdown", "value"),
-        Input("rank-dropdown", "value"),
-        Input("mos-dropdown", "value"),
-        Input("trendline-checkbox", "value"),
-        Input("volatility-checkbox", "value"),
-        Input("user-points", "value"),
-        Input("toggle-probability", "value")
-    ]
+        Input("user-points", "value"),  # Optional: for real-time gauge updates
+    ],
+    [
+        State("date-range-start", "value"),
+        State("date-range-end", "value"),
+        State("component-dropdown", "value"),
+        State("rank-dropdown", "value"),
+        State("mos-dropdown", "value"),
+        State("trendline-checkbox", "value"),
+        State("volatility-checkbox", "value"),
+        State("toggle-probability", "value"),
+    ],
+    prevent_initial_call=True
 )
-def update_graphs(load_clicks, clear_clicks, start_month, end_month, component, rank, mos, trendline, volatility,
-                  user_points, toggle_probability):
-    ctx = dash.callback_context
-    if ctx.triggered_id == "clear-button":
-        return px.line(title="No Data Available"), px.line(title="No Data Available"), px.bar(
-            title="No Data Available"), ""
 
-    if not load_clicks or not start_month or not end_month:
-        return px.line(title="No Data Available"), px.line(title="No Data Available"), px.bar(
-            title="No Data Available"), ""
+
+
+
+def update_graphs(n_clicks, user_points, start_month, end_month, component, rank, mos, trendline, volatility, toggle_probability):
+    ctx = dash.callback_context
+    triggered_id = ctx.triggered_id
+
+    empty_fig = px.line(title="No Data Available")
+
+    if not n_clicks:
+        return empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, "", ""
+
+    if not start_month or not end_month or not rank or not mos or not component:
+        return empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, "", ""
+
+
 
     # ✅ Filter Data and Sort Chronologically
     filtered_df = df.copy()
@@ -355,8 +471,8 @@ def update_graphs(load_clicks, clear_clicks, start_month, end_month, component, 
         })
 
     # ✅ Create Promotion Graph
-    fig1 = px.line(filtered_df, x="Date", y=promotion_column, title="Promotion Points Over Time", color="MOS",
-                   markers=True)
+    fig1 = px.line(filtered_df, x="Date", y=promotion_column, title="Promotion Points Over Time", markers=True,color_discrete_sequence=["green"],
+                   )
 
     # ✅ Add Trend Line if selected
     if "trend" in trendline:
@@ -405,16 +521,14 @@ def update_graphs(load_clicks, clear_clicks, start_month, end_month, component, 
 
     # ✅ Competitiveness Score
     filtered_df["Competitiveness"] = filtered_df[promotions_col] / filtered_df[eligibles_col]
-    fig3 = px.bar(filtered_df, x="Date", y="Competitiveness", title="Competitiveness Score")
+    fig3 = px.bar(filtered_df, x="Date", y="Competitiveness", title="Competitiveness Score",color_discrete_sequence=["green"])
 
     # ✅ Compute Probability Text Output
     probability_text = html.Span([
         f'Given the date range of {start_month} to {end_month}, with your promotion points at {user_points}, ',
         f'you would have promoted {promoted_months} out of {total_months} months. ',
         f'If the past is an indicator, you would have a {historical_probability:.1f}% chance of promoting next month.',
-        html.Br(),
-        html.Span("However, the Army’s promotion point system is more needs-based than statistically driven.",
-                  style={"color": "gray", "fontSize": "10px"})
+        html.Br()
     ], style={
         'color': 'red' if historical_probability < 50 else 'orange' if historical_probability < 80 else 'green'}) if user_points is not None else ""
 
@@ -461,15 +575,21 @@ def update_graphs(load_clicks, clear_clicks, start_month, end_month, component, 
                "bar": {
                    "color": "green" if historical_probability > 80 else "orange" if historical_probability > 50 else "red"}}
     ))
+    fig5.update_layout(margin=dict(t=45, b=25, l=35, r=35))
+
 
     fig6 = go.Figure(go.Indicator(
         mode="gauge+number",
         value=adjusted_probability,
         title={"text": "Bayesian Adjusted Promotion Probability"},
-        gauge={"axis": {"range": [0, 100]},
-               "bar": {
-                   "color": "green" if adjusted_probability > 80 else "orange" if adjusted_probability > 50 else "red"}}
+        gauge={
+            "axis": {"range": [0, 100]},
+            "bar": {
+                "color": "green" if adjusted_probability > 80 else "orange" if adjusted_probability > 50 else "red"}
+        }
     ))
+    fig6.update_layout(margin=dict(t=45, b=25, l=35, r=35))
+
     # ✅ Define the Prediction Text for Next Month's Promotion Points
     # ✅ Define the Prediction Text for Next Month's Promotion Points
     if predicted_promotion_points is not None:
@@ -505,8 +625,10 @@ def update_graphs(load_clicks, clear_clicks, start_month, end_month, component, 
         Input("component-dropdown", "value"),
         Input("rank-dropdown", "value"),
         Input("mos-dropdown", "value"),
-    ]
+    ],
+
 )
+
 def update_sidebar(load_clicks, start_month, end_month, component, rank, mos):
     if not load_clicks or not start_month or not end_month:
         return html.P("No Data Available")
