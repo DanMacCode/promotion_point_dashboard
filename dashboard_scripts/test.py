@@ -542,37 +542,52 @@ def update_graphs(n_clicks, user_points, trendline, volatility, toggle_probabili
         'color': 'red' if historical_probability < 50 else 'orange' if historical_probability < 80 else 'green'}) if user_points is not None else ""
 
     # ✅ Compute Data for Streamgraph
+    # Standard math remains unchanged
     filtered_df["Not_Promoted"] = (filtered_df[eligibles_col] - filtered_df[promotions_col]).fillna(0)
+
+    # Create a jitter to ensure Promoted is always visually on top
+    not_promoted_y = filtered_df["Not_Promoted"].copy()
+    promoted_y = filtered_df[promotions_col].copy()
+
+    # ✅ Apply jitter only where Not_Promoted == Promoted
+    # Add a tiny downward adjustment to Not_Promoted o it plots under
+    jitter = 0.001
+    mask_same = (not_promoted_y == promoted_y)
+    not_promoted_y[mask_same] = not_promoted_y[mask_same] - jitter
 
     # ✅ Ensure Sorting for Streamgraph
     filtered_df = filtered_df.sort_values(by="Date")
 
     fig4 = go.Figure()
+
+    # ✅ First: Eligible Not Promoted (green, bottom layer)
     fig4.add_trace(go.Scatter(
         x=filtered_df["Date"],
         y=filtered_df["Not_Promoted"],
-        fill='tozeroy',
+        fill='tozeroy',  # ✅ Fill from baseline
         mode='none',
         name="Eligible not Promoted",
         fillcolor="green",
         opacity=0.6
     ))
 
+    # ✅ Second: Promoted (gold, always on top)
     fig4.add_trace(go.Scatter(
         x=filtered_df["Date"],
         y=filtered_df[promotions_col],
-        fill='tonexty',
+        fill='tozeroy',  # ✅ Fill from baseline again
         mode='none',
         name="Promoted",
         fillcolor="gold",
-        opacity=0.8
+        opacity=0.9
     ))
 
     fig4.update_layout(
         title="Historical Soldier Selection",
         xaxis_title="Date",
         yaxis_title="# of Soldiers",
-        showlegend=True
+        showlegend=True,
+        legend=dict(traceorder="normal")
     )
 
     # ✅ Create Probability Gauges
