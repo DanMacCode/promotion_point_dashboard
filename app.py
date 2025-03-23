@@ -481,7 +481,7 @@ def update_graphs(n_clicks, user_points, trendline, volatility, toggle_probabili
         color_discrete_sequence=["green"],
         labels={promotion_column: "MOS Cutoffs"}
     )
-    fig1.update_traces(name="MOS Cutoff", showlegend=True)
+    fig1.update_traces(name="MOS Cutoff Points", showlegend=True)
 
     # ✅ Add Trend Line if selected
     if "trend" in trendline:
@@ -550,22 +550,22 @@ def update_graphs(n_clicks, user_points, trendline, volatility, toggle_probabili
     fig4 = go.Figure()
     fig4.add_trace(go.Scatter(
         x=filtered_df["Date"],
+        y=filtered_df["Not_Promoted"],
+        fill='tozeroy',
+        mode='none',
+        name="Eligible not Promoted",
+        fillcolor="green",
+        opacity=0.6
+    ))
+
+    fig4.add_trace(go.Scatter(
+        x=filtered_df["Date"],
         y=filtered_df[promotions_col],
         fill='tonexty',
         mode='none',
         name="Promoted",
         fillcolor="gold",
         opacity=0.8
-    ))
-
-    fig4.add_trace(go.Scatter(
-        x=filtered_df["Date"],
-        y=filtered_df["Not_Promoted"],
-        fill='tonexty',
-        mode='none',
-        name="Eligible not Promoted",
-        fillcolor="green",
-        opacity=0.6
     ))
 
     fig4.update_layout(
