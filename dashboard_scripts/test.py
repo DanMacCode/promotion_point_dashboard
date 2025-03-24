@@ -543,39 +543,33 @@ def update_graphs(n_clicks, user_points, trendline, volatility, toggle_probabili
 
     # ✅ Compute Data for Streamgraph
     # Standard math remains unchanged
-    filtered_df["Not_Promoted"] = (filtered_df[eligibles_col] - filtered_df[promotions_col]).fillna(0)
+    # ✅ Compute Bottom Layer: Not Promoted
+    filtered_df["Not_Promoted"] = (filtered_df[eligibles_col] - filtered_df[promotions_col]).clip(lower=0)
 
-    # Create a jitter to ensure Promoted is always visually on top
-    not_promoted_y = filtered_df["Not_Promoted"].copy()
-    promoted_y = filtered_df[promotions_col].copy()
-
-    # ✅ Apply jitter only where Not_Promoted == Promoted
-    # Add a tiny downward adjustment to Not_Promoted o it plots under
-    jitter = 0.001
-    mask_same = (not_promoted_y == promoted_y)
-    not_promoted_y[mask_same] = not_promoted_y[mask_same] - jitter
+    # ✅ Compute Top Layer: Total Eligible (for stacking)
+    filtered_df["Eligible_Total"] = filtered_df[eligibles_col]
 
     # ✅ Ensure Sorting for Streamgraph
     filtered_df = filtered_df.sort_values(by="Date")
 
     fig4 = go.Figure()
 
-    # ✅ First: Eligible Not Promoted (green, bottom layer)
+    # ✅ Bottom layer — green: Not promoted
     fig4.add_trace(go.Scatter(
         x=filtered_df["Date"],
         y=filtered_df["Not_Promoted"],
-        fill='tozeroy',  # ✅ Fill from baseline
+        fill='tozeroy',
         mode='none',
         name="Eligible not Promoted",
         fillcolor="green",
         opacity=0.6
     ))
 
-    # ✅ Second: Promoted (gold, always on top)
+    # ✅ Top layer — gold: Promoted stacked on top of Not Promoted
     fig4.add_trace(go.Scatter(
         x=filtered_df["Date"],
-        y=filtered_df[promotions_col],
-        fill='tozeroy',  # ✅ Fill from baseline again
+        y=filtered_df["Eligible_Total"],  # full height = eligible
+        fill='tonexty',
         mode='none',
         name="Promoted",
         fillcolor="gold",
