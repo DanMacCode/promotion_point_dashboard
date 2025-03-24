@@ -542,12 +542,19 @@ def update_graphs(n_clicks, user_points, trendline, volatility, toggle_probabili
         'color': 'red' if historical_probability < 50 else 'orange' if historical_probability < 80 else 'green'}) if user_points is not None else ""
 
     # ✅ Compute Data for Streamgraph
-    filtered_df["Not_Promoted"] = (filtered_df[eligibles_col] - filtered_df[promotions_col]).fillna(0)
+    # Standard math remains unchanged
+    # ✅ Compute Bottom Layer: Not Promoted
+    filtered_df["Not_Promoted"] = (filtered_df[eligibles_col] - filtered_df[promotions_col]).clip(lower=0)
+
+    # ✅ Compute Top Layer: Total Eligible (for stacking)
+    filtered_df["Eligible_Total"] = filtered_df[eligibles_col]
 
     # ✅ Ensure Sorting for Streamgraph
     filtered_df = filtered_df.sort_values(by="Date")
 
     fig4 = go.Figure()
+
+    # ✅ Bottom layer — green: Not promoted
     fig4.add_trace(go.Scatter(
         x=filtered_df["Date"],
         y=filtered_df["Not_Promoted"],
@@ -558,21 +565,23 @@ def update_graphs(n_clicks, user_points, trendline, volatility, toggle_probabili
         opacity=0.6
     ))
 
+    # ✅ Top layer — gold: Promoted stacked on top of Not Promoted
     fig4.add_trace(go.Scatter(
         x=filtered_df["Date"],
-        y=filtered_df[promotions_col],
+        y=filtered_df["Eligible_Total"],  # full height = eligible
         fill='tonexty',
         mode='none',
         name="Promoted",
         fillcolor="gold",
-        opacity=0.8
+        opacity=0.9
     ))
 
     fig4.update_layout(
         title="Historical Soldier Selection",
         xaxis_title="Date",
         yaxis_title="# of Soldiers",
-        showlegend=True
+        showlegend=True,
+        legend=dict(traceorder="normal")
     )
 
     # ✅ Create Probability Gauges
