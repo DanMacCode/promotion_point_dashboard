@@ -13,6 +13,13 @@ from dashboard_scripts.update_change_graph import create_change_graph
 from dashboard_scripts.bayesian_adjustment import compute_bayesian_promotion_probability
 from dashboard_scripts.predict_next_promotion import predict_next_promotion_points
 
+app = dash.Dash(
+    __name__,
+    title="Promotion Point Dashboard",  # 👈 This is the tab title
+    external_stylesheets=["https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/cosmo/bootstrap.min.css"]
+)
+
+
 # ✅ Load 'Coming Soon' content from GitHub
 coming_soon_url = "https://raw.githubusercontent.com/DanMacCode/promotion_point_dashboard/refs/heads/main/data/master/coming_soon.md"
 try:
