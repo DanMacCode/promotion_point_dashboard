@@ -29,7 +29,7 @@ except:
 
 # ✅ Initialize Dash app
 app = dash.Dash(__name__, external_stylesheets=["https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/cosmo/bootstrap.min.css"])
-
+app.title = "Promotion Point Dashboard"
 
 server = app.server
 
