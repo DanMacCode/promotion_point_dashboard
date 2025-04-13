@@ -18,7 +18,7 @@ def convert_pdf_to_txt(pdf_filename):
     with open(txt_path, "w", encoding="utf-8") as f:
         f.write(text)
 
-    print(f"✅ Converted {pdf_filename} → {txt_filename}")
+    print(f"Converted {pdf_filename} → {txt_filename}")
     return txt_path
 
 # Process all PDFs

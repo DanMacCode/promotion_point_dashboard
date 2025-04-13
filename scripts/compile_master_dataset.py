@@ -24,7 +24,7 @@ def compile_all_csvs():
 
         # Save as master CSV
         master_df.to_csv(MASTER_FILE, index=False)
-        print(f"✅ Compiled all CSVs into {MASTER_FILE}")
+        print(f"Compiled all CSVs into {MASTER_FILE}")
 
 if __name__ == "__main__":
     compile_all_csvs()

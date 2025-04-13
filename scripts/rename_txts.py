@@ -1,52 +1,68 @@
 import os
 import re
 
-# Define directories
-TXT_DIR = "../data/txt/"
+# Set working directory to current file location
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+TXT_DIR = "../data/txt"
 
-# Function to extract metadata from SUBJECT line
-def extract_metadata_from_txt(txt_path):
-    with open(txt_path, "r", encoding="utf-8") as f:
-        text = f.read().replace("\n", " ")  # Join all lines into one to handle multi-line subject lines
+def generate_unique_filename(directory, base_name):
+    name = base_name
+    count = 1
+    while os.path.exists(os.path.join(directory, name + ".txt")):
+        count += 1
+        name = f"{base_name}_{count}"
+    return name + ".txt"
 
-    # Updated regex to capture dates and component type across multiple lines
+def determine_component_from_subject(content):
     match = re.search(
-        r"SUBJECT:\s*HQDA Promotion Point Cutoff Scores for \d+ (\w+) (\d{4}).*for the (Active Army|United States Army Reserve, Active Guard Reserve)",
-        text,
+        r"SUBJECT:\s*HQDA Promotion Point Cutoff Scores for \d+ (\w+) (\d{4}).*?for the (United States Army Reserve.*?|Active Army)",
+        content,
         re.IGNORECASE
     )
+    if not match:
+        return None, None, None
+    month, year, component_text = match.groups()
+    component = "RESERVE" if "Reserve" in component_text else "ACTIVE"
+    return month, year, component
 
-    if match:
-        month, year, component = match.groups()
-        short_month = month[:3].upper()  # Convert to three-letter format (e.g., FEB)
-        year = year[-2:]  # Use last two digits (e.g., 25 for 2025)
-        component = "RESERVE" if "Reserve" in component else "ACTIVE"
-        return f"{component}_{short_month}_{year}"
-    return None
+def determine_component_from_cutoff(content):
+    if "AGR PROMOTION QUALIFICATION SCORES" in content:
+        return "RESERVE"
+    elif "AA PROMOTION QUALIFICATION SCORES" in content:
+        return "ACTIVE"
+    else:
+        return None
 
-# Function to rename TXT files safely
+def rename_txt_file(txt_path):
+    with open(txt_path, "r", encoding="utf-8") as f:
+        content = f.read().replace("\n", " ")
+
+    month, year, subject_component = determine_component_from_subject(content)
+    if not month or not year or not subject_component:
+        print(f"[SKIP] No SUBJECT line found in {txt_path}")
+        return txt_path
+
+    cutoff_component = determine_component_from_cutoff(content)
+    component = cutoff_component if cutoff_component else subject_component
+
+    short_month = month[:3].upper()
+    short_year = year[-2:]
+    base_name = f"{component}_{short_month}_{short_year}"
+
+    new_filename = generate_unique_filename(os.path.dirname(txt_path), base_name)
+    new_path = os.path.join(os.path.dirname(txt_path), new_filename)
+    os.rename(txt_path, new_path)
+    print(f"[RENAMED] {os.path.basename(txt_path)} → {new_filename}")
+    return new_path
+
 def rename_txts():
-    rename_map = {}
-
     for txt_filename in os.listdir(TXT_DIR):
         if txt_filename.endswith(".txt"):
             txt_path = os.path.join(TXT_DIR, txt_filename)
-
-            # Extract metadata from SUBJECT line
-            new_filename = extract_metadata_from_txt(txt_path)
-            if new_filename:
-                new_txt_path = os.path.join(TXT_DIR, f"{new_filename}.txt")
-
-                # Ensure original file exists before renaming
-                if os.path.exists(txt_path):
-                    rename_map[txt_path] = new_txt_path
-                else:
-                    print(f"⚠️ Skipping (File Not Found): {txt_path}")
-
-    # Perform renaming
-    for old_path, new_path in rename_map.items():
-        os.rename(old_path, new_path)
-        print(f"✅ Renamed TXT: {os.path.basename(old_path)} → {os.path.basename(new_path)}")
+            if os.path.exists(txt_path):
+                rename_txt_file(txt_path)
+            else:
+                print(f"[SKIP] File not found: {txt_path}")
 
 if __name__ == "__main__":
     rename_txts()
