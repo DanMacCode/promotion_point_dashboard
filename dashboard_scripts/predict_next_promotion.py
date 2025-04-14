@@ -38,7 +38,7 @@ def predict_next_promotion_points(df, promotion_column):
     )
 
     # 95% confidence interval
-    ci_lower = max(0, round(y_pred - 1.96 * SE_pred))
-    ci_upper = round(y_pred + 1.96 * SE_pred)
+    ci_lower = max(24, round(y_pred - 1.96 * SE_pred))
+    ci_upper = min(798, round(y_pred + 1.96 * SE_pred))
 
     return max(0, round(y_pred)), (ci_lower, ci_upper)
