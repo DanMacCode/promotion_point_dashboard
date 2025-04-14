@@ -239,8 +239,8 @@ app.layout = html.Div(
                                 style={"textAlign": "center", "color": "orange", "margin": "0"}),
                         html.P(
                             "DoD networks often prohibit write permissions. As a result, "
-                            "certain features may be restricted depending on whether you are"
-                            "on a DoD or private network."
+                            "certain features may be restricted depending on whether you "
+                            "are on a DoD or private network."
                             ,
                             style={"textAlign": "center", "fontSize": "17px", "color": "black", "margin": "0"}
                         )
@@ -299,7 +299,7 @@ app.layout = html.Div(
                                 dcc.Graph(id="predicted-probability-gauge", style={"width": "100%", "height": "230px"}),
                                 html.P(
                                     "Bayesian Probability adjusts for volatility by down-weighting months with large jumps in promotion points. It calculates your historical chance, then penalizes it based on your MOS's unpredictability.",
-                                    style={"textAlign": "center", "fontSize": "14px"})
+                                    style={"textAlign": "center", "fontSize": "16px"})
                             ],
                             style={
                                 "width": "48%",
@@ -521,17 +521,25 @@ def update_graphs(n_clicks, user_points, trendline, volatility, toggle_probabili
     else:
         adjusted_probability = 0
     adjusted_probability = compute_bayesian_promotion_probability(filtered_df, promotion_column, user_points)
-    predicted_promotion_points = predict_next_promotion_points(filtered_df, promotion_column)
+    predicted_promotion_points, ci_bounds = predict_next_promotion_points(filtered_df, promotion_column)
+
 
     # Build prediction text.
     if predicted_promotion_points is not None:
         prediction_text = html.Div([
             html.H4("Next Month's Predicted Cutoff", style={"textAlign": "center", "margin": "0"}),
+            html.H2(
+                f"{predicted_promotion_points}",
+                style={"textAlign": "center", "fontSize": "36px", "margin": "0", "color": "green"}
+            ),
             html.P(
-                f"Predicted Promotion Points: {predicted_promotion_points}",
-                style={"textAlign": "center", "color": "blue", "fontSize": "16px", "margin": "0"}
+                f"(Confidence Interval: There is a 95% chance that \n next month's cutoff "
+                f"score will fall between {ci_bounds[0]} – {ci_bounds[1]})",
+                style={"textAlign": "center", "fontSize": "14px", "margin": "0", "color": "black","whiteSpace": "pre-line"}
             )
         ])
+
+
     else:
         prediction_text = html.P("Not enough data for prediction.",
                                  style={"textAlign": "center", "fontSize": "16px", "color": "gray", "margin": "0"})
@@ -651,12 +659,12 @@ def update_graphs(n_clicks, user_points, trendline, volatility, toggle_probabili
     percentage_text = html.Div([
         html.H2(
             f"{soldier_promoted_pct:.1f}%",
-            style={"textAlign": "center", "fontSize": "36px", "margin": "0", "color": "blue"}
+            style={"textAlign": "center", "fontSize": "36px", "margin": "0", "color": "green"}
         ),
         html.P(
             f"Between {start_month} and {end_month}, {soldier_promoted_pct:.1f}% "
             f"of eligible {mos} soldiers were selected for promotion.",
-            style={"textAlign": "center", "fontSize": "14px", "margin": "0"}
+            style={"textAlign": "center", "fontSize": "14px", "margin": "0","color": "black"}
         )
     ])
 
