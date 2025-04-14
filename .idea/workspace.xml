@@ -6,18 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b373051f-5357-49d9-b0f7-7545ba4ffdb5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dashboard_scripts/calculate_promotion_percentage.py" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard_scripts/calculate_promotion_percentage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dashboard_scripts/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard_scripts/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/master/coming_soon.md" beforeDir="false" afterPath="$PROJECT_DIR$/data/master/coming_soon.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cleanup_oldtxts.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cleanup_oldtxts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/compile_master_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/compile_master_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/data/master/master_promotion_data.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/monthly_csvupdate_pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/monthly_csvupdate_pipeline.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/pdf_to_txt.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/pdf_to_txt.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/rename_txts.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/rename_txts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/scrape_pdfs.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/scrape_pdfs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/txt_to_csv.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/txt_to_csv.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,29 +70,7 @@
       <recent name="C:\Users\macle\Data_Projects\promotion_point_dashboard\scripts" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.monthly_csvupdate_pipeline">
-    <configuration name="cleanup_old_txts" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="promotion_point_dashboard" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/cleanup_old_txts.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.test">
     <configuration name="cleanup_oldtxts" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="promotion_point_dashboard" />
       <option name="ENV_FILES" value="" />
@@ -170,6 +137,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="promotion_point_dashboard" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/dashboard_scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dashboard_scripts/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="txt_to_csv" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="promotion_point_dashboard" />
       <option name="ENV_FILES" value="" />
@@ -194,11 +183,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.monthly_csvupdate_pipeline" />
         <item itemvalue="Python.compile_master_dataset" />
         <item itemvalue="Python.txt_to_csv" />
         <item itemvalue="Python.cleanup_oldtxts" />
-        <item itemvalue="Python.cleanup_old_txts" />
       </list>
     </recent_temporary>
   </component>

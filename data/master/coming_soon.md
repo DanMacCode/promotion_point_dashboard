@@ -1,5 +1,5 @@
 - Improved Bayesian Weighting
-- Confidence Intervals for predictions
-- Automated Monthly Data Scraping to ensure the site is up-to-date each month
-- Send feedback feature
-- 
+- Send direct feedback feature
+- Normal/Skewed distribution plots
+- Ability to support the project
+- UI improvements
