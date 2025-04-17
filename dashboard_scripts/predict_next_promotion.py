@@ -65,6 +65,7 @@ def predict_next_promotion_points(df, promotion_column, ci_level=95):
     ci_upper = min(798, round(y_pred + z * SE_pred))
 
     # 9. Return rounded prediction and bounds
-    return max(0, min(798, round(y_pred))), (ci_lower, ci_upper)
+    return min(798, max(24, round(y_pred))), (ci_lower, ci_upper)
+
 
 
