@@ -1,3 +1,4 @@
+- Option to exclude outlier months (exclude 798 to decrease hyper variance)
 - Improved Bayesian Weighting
 - Send direct feedback feature
 - Normal/Skewed distribution plots

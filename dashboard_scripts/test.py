@@ -329,7 +329,7 @@ app.layout = html.Div(
                         html.H4("Percentage of Soldiers Promoted", style={"textAlign": "center", "margin": "0"}),
                         html.Div(
                             id="percentage-box",
-                            style={"fontSize": "16px", "textAlign": "center", "color": "blue", "margin": "0"}
+                            style={"textAlign": "center", "color": "blue", "margin": "0"}
                         )
                     ],
                     style={
