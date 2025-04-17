@@ -309,7 +309,7 @@ app.layout = html.Div(
                                 html.Span(" – ", style={"fontSize": "20px"}),
                                 html.Span(id="ci-upper", style={"fontSize": "20px", "fontWeight": "bold"}),
                             ],
-                            style={"textAlign": "center", "marginTop": "8px", "fontSize": "14px"}
+                            style={"textAlign": "center", "marginTop": "8px", "fontSize": "20px"}
                         )
                     ],
                     style={
@@ -329,7 +329,7 @@ app.layout = html.Div(
                         html.H4("Percentage of Soldiers Promoted", style={"textAlign": "center", "margin": "0"}),
                         html.Div(
                             id="percentage-box",
-                            style={"fontSize": "16px", "textAlign": "center", "color": "blue", "margin": "0"}
+                            style={"textAlign": "center", "color": "blue", "margin": "0"}
                         )
                     ],
                     style={
@@ -806,7 +806,7 @@ def update_graphs(n_clicks, ci_level, user_points, trendline, volatility, toggle
         html.P(
             f"Between {start_month} and {end_month}, {soldier_promoted_pct:.1f}% "
             f"of eligible {mos} soldiers were selected for promotion.",
-            style={"textAlign": "center", "fontSize": "14px", "margin": "0","color": "black"}
+            style={"textAlign": "center", "fontSize": "20px", "margin": "0","color": "black"}
         )
     ])
 

@@ -204,16 +204,19 @@ app.layout = html.Div(
                             ),
                             dbc.AccordionItem(
                                 html.P(
-                                    """All data was sourced from the monthly AR 600‑8‑19 “Promotion Point Cutoff” publications. 
+                                    """All data is sourced from the monthly AR 600‑8‑19 “Promotion Point Cutoff” publications. 
                                     A scraper pulled every report since August 2023, which was when secondary and primary points were unified. The PDFs
                                       (turned TXTs) are parsed into CSVs with all relevant fields mapped. The Master CSV auto-updates on the 29th, each month. 
                                     If the Army alters their format, you’ll see discrepancies until I update the logic."""
                                 ), style={"padding": "0.0rem 0.0rem"},
                                 title="Data Sourcing",
+                                item_id="data-sourcing",
                             ),
                         ],
                         start_collapsed=True,
+                        active_item="data-sourcing",
                         flush=True,
+                        className="accordian"
                     ),
                     style={
                         "width": "20%",
@@ -306,7 +309,7 @@ app.layout = html.Div(
                                 html.Span(" – ", style={"fontSize": "20px"}),
                                 html.Span(id="ci-upper", style={"fontSize": "20px", "fontWeight": "bold"}),
                             ],
-                            style={"textAlign": "center", "marginTop": "8px", "fontSize": "14px"}
+                            style={"textAlign": "center", "marginTop": "8px", "fontSize": "20px"}
                         )
                     ],
                     style={
@@ -429,7 +432,7 @@ app.layout = html.Div(
                                                 "2) (base rate) = wins / (total months)", html.Br(),
                                                 "3) (vol frac) = (high vol months) / (total_months)", html.Br(),
                                                 html.B("Formula:"), html.Br(),
-                                                "(% adjusted) = (base rate) × ((1 − vol_frac) × 100)" ,html.Br(),
+                                                "(% adjusted) = (base rate) × ((1 − vol frac) × 100)" ,html.Br(),
                                                 "(For More Info: See Bayes Theorum)" ,html.Br(),
 
                                             ],
@@ -803,7 +806,7 @@ def update_graphs(n_clicks, ci_level, user_points, trendline, volatility, toggle
         html.P(
             f"Between {start_month} and {end_month}, {soldier_promoted_pct:.1f}% "
             f"of eligible {mos} soldiers were selected for promotion.",
-            style={"textAlign": "center", "fontSize": "14px", "margin": "0","color": "black"}
+            style={"textAlign": "center", "fontSize": "20px", "margin": "0","color": "black"}
         )
     ])
 
