@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b373051f-5357-49d9-b0f7-7545ba4ffdb5" name="Changes" comment="" />
+    <list default="true" id="b373051f-5357-49d9-b0f7-7545ba4ffdb5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/assets/custom-toolip.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/FAQ.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/about.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/dashboard.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/methedology.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/privacy_policy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashboard_scripts/predict_next_promotion.py" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard_scripts/predict_next_promotion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashboard_scripts/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard_scripts/test.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

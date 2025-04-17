@@ -12,6 +12,8 @@ import plotly.graph_objects as go
 from dashboard_scripts.update_change_graph import create_change_graph
 from dashboard_scripts.bayesian_adjustment import compute_bayesian_promotion_probability
 from dashboard_scripts.predict_next_promotion import predict_next_promotion_points
+import dash_bootstrap_components as dbc
+
 from dashboard_scripts.calculate_promotion_percentage import calculate_promotion_percentage
 
 app = dash.Dash(
@@ -48,6 +50,23 @@ sorted_dates = df["Date"].dropna().sort_values().dt.strftime("%b-%Y").unique().t
 # Layout
 app.layout = html.Div(
     [
+        dcc.Markdown(
+            """
+            <style>
+            .tooltip-inner {
+                max-width: 1000px !important;
+                width: 1000px !important;
+                white-space: normal !important;
+                text-align: left !important;
+                padding: 10px !important;
+                font-size: 14px !important;
+            }
+            </style>
+            """,
+            dangerously_allow_html=True
+        )
+        ,
+
         # Dashboard Title
         html.H1("Army Promotion Point Dashboard", style={"textAlign": "center", "color": "gold"},
                 className="text-center fw-bold mt-3 mb-3"),
@@ -177,16 +196,33 @@ app.layout = html.Div(
                            "backgroundColor": "#ffffff", "position": "relative"}
                 ),
                 html.Div(
-                    [
-                        html.H5("Coming Soon:"),
-                        html.Ul([html.Li(line.strip().lstrip("-").strip()) for line in coming_soon_text.splitlines() if
-                                 line.strip()],
-                                id="updates-box",
-                                style={"fontSize": "14px", "lineHeight": "1.6", "margin": "0", "paddingLeft": "20px"})
-                    ],
-                    style={"width": "20%", "border": "1px solid #ddd", "borderRadius": "10px",
-                           "boxShadow": "0px 4px 8px rgba(0,0,0,0.1)", "padding": "15px",
-                           "backgroundColor": "#f8f9fa", "marginLeft": "2%", "height": "100%"}
+                    dbc.Accordion(
+                        [
+                            dbc.AccordionItem(
+                                dcc.Markdown(coming_soon_text),style={"padding": "0.25rem 0.5rem"},
+                                title="Coming Soon",
+                            ),
+                            dbc.AccordionItem(
+                                html.P(
+                                    """All data is sourced from the monthly AR 600‑8‑19 “Promotion Point Cutoff” publications. 
+                                    A scraper pulled every report since August 2023, which was when secondary and primary points were unified. The PDFs
+                                      (turned TXTs) are parsed into CSVs with all relevant fields mapped. The Master CSV auto-updates on the 29th, each month. 
+                                    If the Army alters their format, you’ll see discrepancies until I update the logic."""
+                                ), style={"padding": "0.0rem 0.0rem"},
+                                title="Data Sourcing",
+                                item_id="data-sourcing",
+                            ),
+                        ],
+                        start_collapsed=True,
+                        active_item="data-sourcing",
+                        flush=True,
+                        className="accordian"
+                    ),
+                    style={
+                        "width": "20%",
+                        "marginLeft": "2%",
+                        "backgroundColor": "#f8f9fa",
+                    }
                 )
             ],
             style={"display": "flex", "justifyContent": "space-between", "alignItems": "flex-start",
@@ -201,6 +237,81 @@ app.layout = html.Div(
                 # Box 1: Next Month's Predicted Cutoff
                 html.Div(
                     id="prediction-text",
+                    children=[
+                        html.Div(
+                            [
+                                html.H4("Next Month's Predicted Cutoff",
+                                        style={"textAlign": "center", "margin": "0", "flex": "1"}),
+                                html.Div(
+                                    [
+                                        html.Div(
+                                            "ℹ️", id="info-icon",
+                                            style={"fontSize": "20px", "color": "#007BFF", "cursor": "pointer"}
+                                        ),
+                                        dbc.Tooltip(
+                                            [
+                                                html.B("Reliability:"), html.Br(),
+                                                "The prediction is made using Ordinary Least Squares (OLS) Linear Regression, which relies on historical data for the following month's predidiction. ",
+                                                "It cannot anticipate the needs of the Army. ",
+                                                "The more outliers there are for your MOS, the less accurate OLS regression will be, since one of this model's core assumptions is that the past has a linear relationship with the future.",
+                                                html.Br(), html.Br(),
+
+                                                html.B("Confidence Intervals:"), html.Br(),
+                                                "Confidence intervals are the model's prediction for the upper and lower range of expected outcomes. ",
+                                                "A result of the bias-variance tradeoff is such that the higher your confidence interval, the wider the range of points will be, and the lower your confidence interval, the narrower the point range will be.",
+                                                html.Br(), html.Br(),
+
+                                                html.B("Pro Tip:"), html.Br(),
+                                                "Your date range informs the OLS model. Consider excluding months with outliers for more accurate predictions."
+                                            ],
+
+                                            target="info-icon",
+                                            placement="right",
+                                            autohide=False,
+                                            className="wide-tooltip",
+                                            style={"fontSize": "14px",
+                                                    "width": "700px",
+                                                    "whiteSpace": "normal",
+                                                    "padding": "10px",
+                                                    "textAlign": "left"},
+
+
+                                        )
+                                    ],
+                                    id="info-icon-container",
+                                    style={"position": "absolute", "top": "4px", "right": "4px","maxWidth": "700px"}
+                                )
+                            ],
+                            style={"position": "relative", "display": "flex", "justifyContent": "center",
+                                   "alignItems": "center"}
+                        ),
+
+                        # Predicted Cutoff Big Number
+                        html.H2(
+                            id="predicted-cutoff",
+                            style={"textAlign": "center", "fontSize": "36px", "margin": "0", "color": "green"}
+                        ),
+
+                        # Confidence Interval Row
+                        html.Div(
+                            [
+                                html.Span("Confidence Interval: There is a ", style={"fontSize": "20px"}),
+                                dcc.Dropdown(
+                                    id="ci-level-dropdown",
+                                    options=[{"label": f"{i}", "value": i} for i in range(50, 100, 5)],
+                                    value=95,
+                                    clearable=False,
+                                    style={"width": "60px", "display": "inline-block", "verticalAlign": "middle",
+                                           "padding": "0"}
+                                ),
+                                html.Span("% chance next month's cutoff will be between ", style={"fontSize": "20px"}),
+                                html.Span(id="ci-lower", style={"fontSize": "20px", "fontWeight": "bold"}),
+                                html.Span(" – ", style={"fontSize": "20px"}),
+                                html.Span(id="ci-upper", style={"fontSize": "20px", "fontWeight": "bold"}),
+                            ],
+                            style={"textAlign": "center", "marginTop": "8px", "fontSize": "14px"}
+                        )
+                    ],
                     style={
                         "flex": "0 0 30%",
                         "boxSizing": "border-box",
@@ -296,10 +407,53 @@ app.layout = html.Div(
                         ),
                         html.Div(
                             [
-                                dcc.Graph(id="predicted-probability-gauge", style={"width": "100%", "height": "230px"}),
+                                dcc.Graph(
+                                    id="predicted-probability-gauge",
+                                    style={"width": "100%", "height": "230px"}
+                                ),
+
+                                # ─── Bayesian math info icon ───────────────────────────
+                                html.Div(
+                                    [
+                                        html.Span(
+                                            "ℹ️",
+                                            id="bayes-info",
+                                            style={
+                                                "fontSize": "20px",
+                                                "color": "blue",
+                                                "cursor": "pointer",
+                                                "marginLeft": "8px"
+                                            }
+                                        ),
+                                        dbc.Tooltip(
+                                            [
+                                                html.B("How it works (Simplified):"), html.Br(),
+                                                "1) (wins) = (months where your points ≥ cutoff)", html.Br(),
+                                                "2) (base rate) = wins / (total months)", html.Br(),
+                                                "3) (vol frac) = (high vol months) / (total_months)", html.Br(),
+                                                html.B("Formula:"), html.Br(),
+                                                "(% adjusted) = (base rate) × ((1 − vol_frac) × 100)" ,html.Br(),
+                                                "(For More Info: See Bayes Theorum)" ,html.Br(),
+
+                                            ],
+                                            target="bayes-info",
+                                            placement="top",
+                                            style={
+                                                "maxWidth": "300px",
+                                                "whiteSpace": "normal",
+                                                "fontSize": "14px"
+                                            },
+                                            autohide=False
+                                        )
+                                    ],
+                                    style={"display": "inline-flex", "alignItems": "right"}
+                                ),
+
                                 html.P(
-                                    "Bayesian Probability adjusts for volatility by down-weighting months with large jumps in promotion points. It calculates your historical chance, then penalizes it based on your MOS's unpredictability.",
-                                    style={"textAlign": "center", "fontSize": "16px"})
+                                    "Bayesian Probability adjusts for volatility by down‑weighting months with large jumps in promotion points. "
+                                    "It calculates your historical chance, then penalizes it based on your MOS's unpredictability.",
+                                    style={"textAlign": "center", "fontSize": "16px"}
+                                )
                             ],
                             style={
                                 "width": "48%",
@@ -309,7 +463,7 @@ app.layout = html.Div(
                                 "padding": "15px",
                                 "backgroundColor": "#ffffff"
                             }
-                        )
+                        ),
                     ],
                     style={"display": "flex", "justifyContent": "space-between", "gap": "4%", "flexWrap": "nowrap"}
                 )
@@ -462,11 +616,14 @@ def clear_inputs(n_clicks):
         Output("competitiveness-graph", "figure"),
         Output("streamgraph", "figure"),
         Output("probability-text", "children"),
-        Output("prediction-text", "children"),
+        Output("predicted-cutoff", "children"),
+        Output("ci-lower", "children"),
+        Output("ci-upper", "children"),
         Output("percentage-box", "children")
     ],
     [
         Input("load-button", "n_clicks"),
+        Input("ci-level-dropdown",  "value"),
         Input("user-points", "value"),
         Input("trendline-checkbox", "value"),
         Input("volatility-checkbox", "value"),
@@ -481,8 +638,10 @@ def clear_inputs(n_clicks):
     ],
     prevent_initial_call=True
 )
-def update_graphs(n_clicks, user_points, trendline, volatility, toggle_probability,
+def update_graphs(n_clicks, ci_level, user_points, trendline, volatility, toggle_probability,
                   start_month, end_month, component, rank, mos):
+
+
     ctx = dash.callback_context
     empty_fig = px.line(title="No Data Available")
     # Check if all required inputs are provided.
@@ -521,28 +680,11 @@ def update_graphs(n_clicks, user_points, trendline, volatility, toggle_probabili
     else:
         adjusted_probability = 0
     adjusted_probability = compute_bayesian_promotion_probability(filtered_df, promotion_column, user_points)
-    predicted_promotion_points, ci_bounds = predict_next_promotion_points(filtered_df, promotion_column)
+    y_pred, (ci_lower, ci_upper) = predict_next_promotion_points(
+        filtered_df, promotion_column, ci_level=ci_level
+    )
 
 
-    # Build prediction text.
-    if predicted_promotion_points is not None:
-        prediction_text = html.Div([
-            html.H4("Next Month's Predicted Cutoff", style={"textAlign": "center", "margin": "0"}),
-            html.H2(
-                f"{predicted_promotion_points}",
-                style={"textAlign": "center", "fontSize": "36px", "margin": "0", "color": "green"}
-            ),
-            html.P(
-                f"(Confidence Interval: There is a 95% chance that \n next month's cutoff "
-                f"score will fall between {ci_bounds[0]} – {ci_bounds[1]})",
-                style={"textAlign": "center", "fontSize": "14px", "margin": "0", "color": "black","whiteSpace": "pre-line"}
-            )
-        ])
-
-
-    else:
-        prediction_text = html.P("Not enough data for prediction.",
-                                 style={"textAlign": "center", "fontSize": "16px", "color": "gray", "margin": "0"})
 
     # Create Promotion Graph.
     fig1 = px.line(filtered_df, x="Date", y=promotion_column, title="Promotion Points Over Time", markers=True,
@@ -668,7 +810,11 @@ def update_graphs(n_clicks, user_points, trendline, volatility, toggle_probabili
         )
     ])
 
-    return fig1, fig5, fig6, fig2, fig3, fig4, probability_text, prediction_text, percentage_text
+    return (
+        fig1, fig5, fig6, fig2, fig3, fig4, probability_text,
+        f"{y_pred}", str(ci_lower), str(ci_upper),
+        percentage_text
+    )
 
 
 @app.callback(
