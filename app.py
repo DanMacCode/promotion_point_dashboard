@@ -432,7 +432,7 @@ app.layout = html.Div(
                                                 "2) (base rate) = wins / (total months)", html.Br(),
                                                 "3) (vol frac) = (high vol months) / (total_months)", html.Br(),
                                                 html.B("Formula:"), html.Br(),
-                                                "(% adjusted) = (base rate) × ((1 − vol_frac) × 100)" ,html.Br(),
+                                                "(% adjusted) = (base rate) × ((1 − vol frac) × 100)" ,html.Br(),
                                                 "(For More Info: See Bayes Theorum)" ,html.Br(),
 
                                             ],
