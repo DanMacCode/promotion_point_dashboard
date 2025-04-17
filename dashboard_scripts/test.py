@@ -545,7 +545,7 @@ app.layout = html.Div(
                     style={
                         "display": "flex",
                         "flexDirection": "column",
-                        "flex": "0 0 25%"
+                        "flex": "0 0 20%"
                     }
                 )
             ],
