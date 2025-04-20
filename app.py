@@ -165,7 +165,7 @@ app.layout = html.Div(
                 dcc.Dropdown(
                     id="user-points",
                     options=[{"label": str(i), "value": i} for i in range(24, 799)],
-                    placeholder="Type your points",
+                    placeholder="Type/Select your points",
                     style={"width": "200px", "margin": "0 auto"},
                     searchable=True,
                     clearable=True
@@ -357,9 +357,9 @@ app.layout = html.Div(
                                 style={"textAlign": "center", "color": "orange", "margin": "0"}),
                         html.P(
                             "DoD networks often prohibit write permissions. If you are on a system with these resitrictions, "
-                            "you will be unable to use dark mode or check boxes on the points over time plot."
+                            "you will be unable to use dark mode, type your promotion points, or check boxes on the points over time plot."
                             ,
-                            style={"textAlign": "center", "fontSize": "17px", "color": "black", "margin": "0"}
+                            style={"textAlign": "center", "fontSize": "16px", "color": "black", "margin": "0"}
                         )
                     ],
                     style={
