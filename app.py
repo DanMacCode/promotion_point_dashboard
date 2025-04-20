@@ -349,9 +349,9 @@ app.layout = html.Div(
                         html.H4("⚠️ DoD Network Limitations ⚠️",
                                 style={"textAlign": "center", "color": "orange", "margin": "0"}),
                         html.P(
-                            "DoD networks often prohibit write permissions. As a result, "
-                            "certain features may be restricted depending on whether you "
-                            "are on a DoD or private network."
+                            "DoD networks often prohibit write permissions. If you are on a system with these resitrictions, "
+                            "you will be unable to use dark mode, input promotion points, generate your promotion probability, "
+                            "or check boxes on the historical plot."
                             ,
                             style={"textAlign": "center", "fontSize": "17px", "color": "black", "margin": "0"}
                         )
