@@ -165,7 +165,7 @@ app.layout = html.Div(
                 dcc.Dropdown(
                     id="user-points",
                     options=[{"label": str(i), "value": i} for i in range(24, 799)],
-                    placeholder="Type/Select your points",
+                    placeholder="Type/Select Your Points",
                     style={"width": "200px", "margin": "0 auto"},
                     searchable=True,
                     clearable=True
@@ -439,7 +439,7 @@ app.layout = html.Div(
                                                 "3) (vol frac) = (high vol months) / (total_months)", html.Br(),
                                                 html.B("Formula:"), html.Br(),
                                                 "(% adjusted) = (base rate) × ((1 − vol frac) × 100)" ,html.Br(),
-                                                "(For More Info: See Bayes Theorum)" ,html.Br(),
+
 
                                             ],
                                             target="bayes-info",
@@ -456,7 +456,7 @@ app.layout = html.Div(
                                 ),
 
                                 html.P(
-                                    "Bayesian Probability adjusts for volatility by down‑weighting months with large jumps in promotion points. "
+                                    "Evidence weighting adjusts for volatility by down‑weighting months with large jumps in promotion points. "
                                     "It calculates your historical chance, then penalizes it based on your MOS's unpredictability.",
                                     style={"textAlign": "center", "fontSize": "16px"}
                                 )
@@ -792,7 +792,7 @@ def update_graphs(n_clicks, ci_level, user_points, trendline, volatility, toggle
     fig5.update_layout(margin=dict(t=45, b=25, l=35, r=35))
 
     fig6 = go.Figure(go.Indicator(mode="gauge+number", value=adjusted_probability,
-                                  title={"text": "Bayesian Adjusted Promotion Probability"},
+                                  title={"text": "Evidence Weighted Promotion Probability"},
                                   gauge={"axis": {"range": [0, 100]},
                                          "bar": {
                                              "color": "green" if adjusted_probability > 80 else "orange" if adjusted_probability > 50 else "red"}}))
