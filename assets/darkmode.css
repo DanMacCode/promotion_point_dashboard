@@ -290,9 +290,7 @@
 #dashboard-page-wrapper.dark-mode #percentage-box p {
   color: black !important;
 }
-/* ──────────────────────────────────────────────────────────────── */
-/* Force the two big numbers green even in dark‑mode (3‑ID chain) */
-/* ──────────────────────────────────────────────────────────────── */
+
 #dashboard-page-wrapper.dark-mode
   #home-page-wrapper
   #prediction-text
@@ -307,7 +305,6 @@
   color: green !important;
 }
 
-/* And make sure nothing else in #percentage-box turns the paragraph green */
 #dashboard-page-wrapper.dark-mode
   #home-page-wrapper
   #percentage-box

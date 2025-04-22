@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b373051f-5357-49d9-b0f7-7545ba4ffdb5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app_legacy.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/darkmode.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/demo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/custom-toolip.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/custom-toolip.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dashboard_scripts/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/about.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/about.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/dashboard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/privacy_policy.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/privacy_policy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/darkmode.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/darkmode.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,36 +37,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Python.about.executor": "Run",
-    "Python.adfnapgirj.executor": "Run",
-    "Python.app (1).executor": "Run",
-    "Python.app.executor": "Run",
-    "Python.calculate_promotion_percentage.executor": "Run",
-    "Python.cleanup_old_txts.executor": "Run",
-    "Python.cleanup_oldtxts.executor": "Run",
-    "Python.compile_master_dataset.executor": "Run",
-    "Python.debug.executor": "Run",
-    "Python.debugging.executor": "Run",
-    "Python.fixed_test.executor": "Run",
-    "Python.monthly_csvupdate_pipeline.executor": "Run",
-    "Python.pdf_to_txt.executor": "Run",
-    "Python.predict_next_promotion_points.executor": "Run",
-    "Python.rename_pdfs.executor": "Run",
-    "Python.rename_txts.executor": "Run",
-    "Python.scrape_pdfs.executor": "Run",
-    "Python.test (1).executor": "Run",
-    "Python.test.5.executor": "Run",
-    "Python.test.executor": "Run",
-    "Python.txt_to_csv.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python.about.executor&quot;: &quot;Run&quot;,
+    &quot;Python.adfnapgirj.executor&quot;: &quot;Run&quot;,
+    &quot;Python.app (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.app.executor&quot;: &quot;Run&quot;,
+    &quot;Python.calculate_promotion_percentage.executor&quot;: &quot;Run&quot;,
+    &quot;Python.cleanup_old_txts.executor&quot;: &quot;Run&quot;,
+    &quot;Python.cleanup_oldtxts.executor&quot;: &quot;Run&quot;,
+    &quot;Python.compile_master_dataset.executor&quot;: &quot;Run&quot;,
+    &quot;Python.debug.executor&quot;: &quot;Run&quot;,
+    &quot;Python.debugging.executor&quot;: &quot;Run&quot;,
+    &quot;Python.fixed_test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.monthly_csvupdate_pipeline.executor&quot;: &quot;Run&quot;,
+    &quot;Python.pdf_to_txt.executor&quot;: &quot;Run&quot;,
+    &quot;Python.predict_next_promotion_points.executor&quot;: &quot;Run&quot;,
+    &quot;Python.rename_pdfs.executor&quot;: &quot;Run&quot;,
+    &quot;Python.rename_txts.executor&quot;: &quot;Run&quot;,
+    &quot;Python.scrape_pdfs.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.5.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.txt_to_csv.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\macle\Data_Projects\promotion_point_dashboard" />
