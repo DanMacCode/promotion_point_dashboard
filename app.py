@@ -358,10 +358,12 @@ def update_graphs(
     # Streamgraph
     filtered_df["Not_Promoted"] = (filtered_df[eligibles_col] - filtered_df[promotions_col]).clip(lower=0)
     fig4 = go.Figure()
+
+    # First: Promoted
     fig4.add_trace(
         go.Scatter(
             x=filtered_df["Date"],
-            y=filtered_df[promotions_col],  # promoted count
+            y=filtered_df[promotions_col],
             fill="tozeroy",
             mode="none",
             name="Promoted",
@@ -371,17 +373,17 @@ def update_graphs(
         )
     )
 
-    # Second: “Eligible not Promoted” goes on top, in gold
+    # Second: Eligible (stacked *on top* of Promoted)
     fig4.add_trace(
         go.Scatter(
             x=filtered_df["Date"],
-            y=(filtered_df[eligibles_col] - filtered_df[promotions_col]).clip(lower=0),
+            y=filtered_df[eligibles_col],
             fill="tonexty",
             mode="none",
             name="Eligible not Promoted",
             fillcolor="green",
             opacity=0.6,
-            hovertemplate="<b>Date</b>: %{x}<br><b>Eligible not Promoted</b>: %{y}<extra></extra>"
+            hovertemplate="<b>Date</b>: %{x}<br><b>Eligible (cumulative)</b>: %{y}<extra></extra>"
         )
     )
 
