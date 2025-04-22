@@ -1,0 +1,316 @@
+/* ─────────────────────────────────────────────────────────────────────────── */
+/*                             LIGHT MODE DEFAULTS                            */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+/* 1) The whole app wrapper is white bg + black text */
+#dashboard-page-wrapper {
+  background-color: white !important;
+  color:            black !important;
+}
+
+/* 2) Explicitly make all your non‑<h1> text black */
+#dashboard-page-wrapper h2,
+#dashboard-page-wrapper h3,
+#dashboard-page-wrapper h4,
+#dashboard-page-wrapper h5,
+#dashboard-page-wrapper h6,
+#dashboard-page-wrapper p,
+#dashboard-page-wrapper li,
+#dashboard-page-wrapper span,
+#dashboard-page-wrapper td,
+#dashboard-page-wrapper th,
+#dashboard-page-wrapper a {
+  color: black !important;
+}
+
+/* 3) Cards (graphs, accordions, panels) stay white */
+.dcc-Graph,
+.dbc-AccordionItem,
+.page-card {
+  background-color: white !important;
+}
+
+/* 4) Closed dropdown controls always white bg + black text */
+.Select-control,
+.Select-control .Select-placeholder,
+.Select-control .Select-value,
+.Select-control .Select-input,
+.Select-arrow-zone,
+.Select-clear-zone {
+  background-color: white !important;
+  color:            black !important;
+}
+
+/* 5) Open dropdown menu & options in light mode */
+.Select-menu-outer,
+.Select-menu,
+.Select-option {
+  background-color: white !important;
+  color:            black !important;
+}
+
+/* 6) Light‑mode hover/selected states */
+.Select-option.is-focused {
+  background-color: #eeeeee !important;
+}
+.Select-option.is-selected {
+  background-color: #dddddd !important;
+}
+
+/* 7) Push the Dark‑Mode switch over 20px so it lines up */
+#dashboard-page-wrapper .form-check.form-switch {
+  margin-left: 20px;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/*                             DARK MODE OVERRIDES                            */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+/* 1) Wrapper flips to dark gray + all text white by default */
+#dashboard-page-wrapper.dark-mode {
+  background-color: #2E2E2E !important;
+  color:            white    !important;
+}
+
+/* 2) Force all non‑<h1> text white */
+#dashboard-page-wrapper.dark-mode h2,
+#dashboard-page-wrapper.dark-mode h3,
+#dashboard-page-wrapper.dark-mode h4,
+#dashboard-page-wrapper.dark-mode h5,
+#dashboard-page-wrapper.dark-mode h6,
+#dashboard-page-wrapper.dark-mode p,
+#dashboard-page-wrapper.dark-mode li,
+#dashboard-page-wrapper.dark-mode span,
+#dashboard-page-wrapper.dark-mode td,
+#dashboard-page-wrapper.dark-mode th {
+  color: white !important;
+}
+
+/* 3) But keep your main <h1> (the title) gold */
+#header-container h1 {
+  color: gold !important;
+}
+
+/* 4) Accent links remain green */
+#dashboard-page-wrapper.dark-mode a {
+  color: green !important;
+}
+
+/* 5) Cards & panels go medium‑dark */
+#dashboard-page-wrapper.dark-mode .dcc-Graph,
+#dashboard-page-wrapper.dark-mode .dbc-AccordionItem,
+#dashboard-page-wrapper.dark-mode .page-card {
+  background-color: #444444 !important;
+}
+
+/* 6) Closed dropdown controls stay white bg + black text */
+#dashboard-page-wrapper.dark-mode .Select-control,
+#dashboard-page-wrapper.dark-mode .Select-control .Select-placeholder,
+#dashboard-page-wrapper.dark-mode .Select-control .Select-value,
+#dashboard-page-wrapper.dark-mode .Select-control .Select-input,
+#dashboard-page-wrapper.dark-mode .Select-arrow-zone,
+#dashboard-page-wrapper.dark-mode .Select-clear-zone {
+  background-color: white !important;
+  color:            black !important;
+}
+
+/* 7) Open dropdown menu: dark bg + white text */
+#dashboard-page-wrapper.dark-mode .Select-menu-outer,
+#dashboard-page-wrapper.dark-mode .Select-menu {
+  background-color: #2E2E2E !important;
+  color:            white   !important;
+}
+
+/* 8) Dropdown options in dark mode */
+#dashboard-page-wrapper.dark-mode .Select-option {
+  color: white !important;
+}
+#dashboard-page-wrapper.dark-mode .Select-option.is-focused {
+  background-color: #555555 !important;
+}
+#dashboard-page-wrapper.dark-mode .Select-option.is-selected {
+  background-color: #666666 !important;
+  color:            white    !important;
+}
+
+/* 9) Make the Dark‑Mode switch label itself white */
+#dashboard-page-wrapper.dark-mode .form-check-label {
+  color: white !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/*                  PRIVACY PAGE & FOOTER SPECIAL CASES                     */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+/* Privacy headings white */
+#dashboard-page-wrapper.dark-mode #privacy-policy-body-content h3,
+#dashboard-page-wrapper.dark-mode #privacy-policy-body-content h4 {
+  color: white !important;
+}
+/* Privacy list labels white */
+#dashboard-page-wrapper.dark-mode #privacy-policy-body-content ul li strong {
+  color: white !important;
+}
+/* Footer disclaimer colors */
+#dashboard-page-wrapper footer p {
+  color: gold !important;
+}
+
+
+/* ──────────────────────────────────────────────── */
+/* In dark mode, all text inside any white box on Home */
+/* ──────────────────────────────────────────────── */
+#dashboard-page-wrapper.dark-mode #home-page-wrapper .white-box * {
+  color: black !important;
+}
+
+/* ───────────────────────────────────────────────────────────── */
+/* Catch-all for other home-page boxes not wrapped in .white-box */
+/* ───────────────────────────────────────────────────────────── */
+#dashboard-page-wrapper.dark-mode #home-page-wrapper #prediction-text *,
+#dashboard-page-wrapper.dark-mode #home-page-wrapper #percentage-box *,
+#dashboard-page-wrapper.dark-mode #home-page-wrapper #probability-text *,
+#dashboard-page-wrapper.dark-mode #home-page-wrapper #bayes-text *,
+#dashboard-page-wrapper.dark-mode #home-page-wrapper #sidebar-details *,
+#dashboard-page-wrapper.dark-mode #home-page-wrapper .warning-box * {
+  color: black !important;
+}
+#dashboard-page-wrapper.dark-mode #home-page-wrapper .white-box *,
+#dashboard-page-wrapper.dark-mode #home-page-wrapper #coming-soon-text *,
+#dashboard-page-wrapper.dark-mode #home-page-wrapper #data-sourcing-text *,
+#dashboard-page-wrapper.dark-mode #home-page-wrapper #features-list *,
+#dashboard-page-wrapper.dark-mode #home-page-wrapper #competitiveness-text *,
+#dashboard-page-wrapper.dark-mode #home-page-wrapper #streamgraph-text * {
+  color: black !important;
+}
+/* force those two bits of text (and anything inside them) to black in dark mode */
+#dashboard-page-wrapper.dark-mode #home-page-wrapper #competitiveness-text,
+#dashboard-page-wrapper.dark-mode #home-page-wrapper #competitiveness-text * {
+  color: black !important;
+}
+
+#dashboard-page-wrapper.dark-mode #home-page-wrapper #streamgraph-text,
+#dashboard-page-wrapper.dark-mode #home-page-wrapper #streamgraph-text * {
+  color: black !important;
+}
+
+/* ──────────────────────────────────────────────────────────────── */
+/* Dropdowns always white bg + black text, but only in dark mode */
+/* ──────────────────────────────────────────────────────────────── */
+#dashboard-page-wrapper.dark-mode .Select-control,
+#dashboard-page-wrapper.dark-mode .Select-control .Select-placeholder,
+#dashboard-page-wrapper.dark-mode .Select-control .Select-value,
+#dashboard-page-wrapper.dark-mode .Select-control .Select-input,
+#dashboard-page-wrapper.dark-mode .Select-arrow-zone,
+#dashboard-page-wrapper.dark-mode .Select-clear-zone,
+#dashboard-page-wrapper.dark-mode .Select-menu-outer,
+#dashboard-page-wrapper.dark-mode .Select-menu,
+#dashboard-page-wrapper.dark-mode .Select-option {
+  background-color: white !important;
+  color:            black !important;
+}
+
+/* Keep the hover/selected states legible too */
+#dashboard-page-wrapper.dark-mode .Select-option.is-focused {
+  background-color: #eeeeee !important;
+}
+#dashboard-page-wrapper.dark-mode .Select-option.is-selected {
+  background-color: #dddddd !important;
+  color:            black    !important;
+}
+/* ───────────────────────────────────────────────────────────── */
+/* Keep the selected value in every dropdown black-on-white    */
+/* when in dark mode (only on the Home page)                   */
+/* ───────────────────────────────────────────────────────────── */
+#dashboard-page-wrapper.dark-mode #home-page-wrapper .Select-control {
+  background-color: white !important;
+}
+#dashboard-page-wrapper.dark-mode #home-page-wrapper
+  .Select-control .Select-placeholder,
+#dashboard-page-wrapper.dark-mode #home-page-wrapper
+  .Select-control .Select-value-label,
+#dashboard-page-wrapper.dark-mode #home-page-wrapper
+  .Select-control .Select-input {
+  color: black !important;
+}
+
+
+/* ──────────────────────────────────────────────────────────────── */
+/* Force those checklist labels black in dark mode on Home page   */
+/* ──────────────────────────────────────────────────────────────── */
+#dashboard-page-wrapper.dark-mode #home-page-wrapper
+  #points-trend-controls label {
+  color: black !important;
+}
+/* Make the “Percentage of Soldiers Promoted” title black in dark mode */
+#dashboard-page-wrapper.dark-mode #percentage-title {
+  color: black !important;
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/* Always force those two big numbers green, any mode        */
+/* ──────────────────────────────────────────────────────────── */
+
+/* Next month’s predicted cutoff */
+#predicted-cutoff {
+  color: green !important;
+}
+
+/* The “percentage of soldiers promoted” number */
+#percentage-box h2 {
+  color: green !important;
+}
+/* ──────────────────────────────────────────────────────────── */
+/* Always force those two big numbers green, any mode        */
+/* ──────────────────────────────────────────────────────────── */
+
+/* Next month’s predicted cutoff */
+#dashboard-page-wrapper #predicted-cutoff {
+  color: green !important;
+}
+/* ──────────────────────────────────────────────────────────── */
+/* Only the H2 inside #percentage-box stays green            */
+/* ──────────────────────────────────────────────────────────── */
+#dashboard-page-wrapper #percentage-box h2 {
+  color: green !important;
+}
+
+/* All paragraphs in #percentage-box should remain black     */
+/* (even in dark‑mode)                                        */
+#dashboard-page-wrapper #percentage-box p {
+  color: black !important;
+}
+
+/* And re‑affirm in dark‑mode too */
+#dashboard-page-wrapper.dark-mode #percentage-box h2 {
+  color: green !important;
+}
+#dashboard-page-wrapper.dark-mode #percentage-box p {
+  color: black !important;
+}
+/* ──────────────────────────────────────────────────────────────── */
+/* Force the two big numbers green even in dark‑mode (3‑ID chain) */
+/* ──────────────────────────────────────────────────────────────── */
+#dashboard-page-wrapper.dark-mode
+  #home-page-wrapper
+  #prediction-text
+  #predicted-cutoff {
+  color: green !important;
+}
+
+#dashboard-page-wrapper.dark-mode
+  #home-page-wrapper
+  #percentage-box
+  h2 {
+  color: green !important;
+}
+
+/* And make sure nothing else in #percentage-box turns the paragraph green */
+#dashboard-page-wrapper.dark-mode
+  #home-page-wrapper
+  #percentage-box
+  p {
+  color: black !important;
+}
