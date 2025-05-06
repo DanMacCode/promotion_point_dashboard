@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b373051f-5357-49d9-b0f7-7545ba4ffdb5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/demo.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +73,7 @@
       <recent name="C:\Users\macle\Data_Projects\promotion_point_dashboard\scripts" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test (1)">
+  <component name="RunManager" selected="Python.app">
     <configuration name="about" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="promotion_point_dashboard" />
       <option name="ENV_FILES" value="" />
@@ -163,8 +164,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test (1)" />
         <item itemvalue="Python.app" />
+        <item itemvalue="Python.test (1)" />
         <item itemvalue="Python.about" />
         <item itemvalue="Python.monthly_csvupdate_pipeline" />
       </list>

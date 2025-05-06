@@ -61,7 +61,7 @@ layout = html.Div(
         "display": "flex",
         "flexDirection": "column",
         "minHeight": "100vh",
-        "paddingBottom": "30px",
+        "paddingBottom": "0px",
     }
 )
 
