@@ -19,7 +19,7 @@ def compute_bayesian_promotion_probability(filtered_df, promotion_column, user_p
 
     # ✅ Identify high-volatility months (big jumps in promotion points)
     filtered_df["Point_Change"] = filtered_df[promotion_column].diff().abs()
-    volatility_threshold = filtered_df["Point_Change"].quantile(0.75)  # Top 25% of changes
+    volatility_threshold = filtered_df["Point_Change"].quantile(0.90)  # Top 25% of changes
     high_volatility_months = filtered_df[filtered_df["Point_Change"] > volatility_threshold]
 
     # ✅ Compute probability of user being affected by a volatility-driven spike
