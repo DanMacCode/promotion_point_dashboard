@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b373051f-5357-49d9-b0f7-7545ba4ffdb5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/master/master_promotion_data.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,8 +50,10 @@
     &quot;Python.cleanup_old_txts.executor&quot;: &quot;Run&quot;,
     &quot;Python.cleanup_oldtxts.executor&quot;: &quot;Run&quot;,
     &quot;Python.compile_master_dataset.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dashboard.executor&quot;: &quot;Run&quot;,
     &quot;Python.debug.executor&quot;: &quot;Run&quot;,
     &quot;Python.debugging.executor&quot;: &quot;Run&quot;,
+    &quot;Python.demo.executor&quot;: &quot;Run&quot;,
     &quot;Python.fixed_test.executor&quot;: &quot;Run&quot;,
     &quot;Python.monthly_csvupdate_pipeline.executor&quot;: &quot;Run&quot;,
     &quot;Python.pdf_to_txt.executor&quot;: &quot;Run&quot;,

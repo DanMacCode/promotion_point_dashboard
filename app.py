@@ -377,13 +377,13 @@ def update_graphs(
     fig4.add_trace(
         go.Scatter(
             x=filtered_df["Date"],
-            y=filtered_df[eligibles_col],
+            y=filtered_df["Not_Promoted"],
             fill="tonexty",
             mode="none",
             name="Eligible not Promoted",
             fillcolor="green",
             opacity=0.6,
-            hovertemplate="<b>Date</b>: %{x}<br><b>Eligible (cumulative)</b>: %{y}<extra></extra>"
+            hovertemplate="<b>Date</b>: %{x}<br><b>Eligible (Not promoted)</b>: %{y}<extra></extra>"
         )
     )
 
