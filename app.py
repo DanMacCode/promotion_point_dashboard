@@ -355,35 +355,55 @@ def update_graphs(
     fig3 = px.bar(filtered_df, x="Date", y="Competitiveness", title="Competitiveness Score",
                   color_discrete_sequence=["green"])
 
-    # Streamgraph
-    filtered_df["Not_Promoted"] = (filtered_df[eligibles_col] - filtered_df[promotions_col]).clip(lower=0)
+    eligible_raw = filtered_df[eligibles_col]
+    promoted_raw = filtered_df[promotions_col]
+
+    eligible = (
+        eligible_raw.astype(str)
+        .str.replace(r"[^\d\.\-]", "", regex=True)
+        .replace("", "0")
+        .astype(float)
+    )
+
+    promoted = (
+        promoted_raw.astype(str)
+        .str.replace(r"[^\d\.\-]", "", regex=True)
+        .replace("", "0")
+        .astype(float)
+    )
+
+    promoted = np.minimum(promoted, eligible)
+    not_promoted = np.maximum(eligible - promoted, 0)
+    print("PROMOTED NONZERO COUNT", int((promoted > 0).sum()))
+    print("EXAMPLE ROWS", list(zip(filtered_df["Date"].dt.strftime("%b-%Y"), eligible, promoted, not_promoted))[:15])
+
     fig4 = go.Figure()
 
-    # First: Promoted
     fig4.add_trace(
         go.Scatter(
             x=filtered_df["Date"],
-            y=filtered_df[promotions_col],
+            y=not_promoted,
+            mode="lines",
+            line=dict(width=0),
+            stackgroup="one",
             fill="tozeroy",
-            mode="none",
-            name="Promoted",
-            fillcolor="gold",
-            opacity=0.9,
-            hovertemplate="<b>Date</b>: %{x}<br><b>Promoted</b>: %{y}<extra></extra>"
+            name="Eligible not Promoted",
+            fillcolor="green",
+            hovertemplate="<b>Date</b>: %{x}<br><b>Eligible not Promoted</b>: %{y}<extra></extra>",
         )
     )
 
-    # Second: Eligible (stacked *on top* of Promoted)
     fig4.add_trace(
         go.Scatter(
             x=filtered_df["Date"],
-            y=filtered_df["Not_Promoted"],
+            y=promoted,
+            mode="lines",
+            line=dict(width=0),
+            stackgroup="one",
             fill="tonexty",
-            mode="none",
-            name="Eligible not Promoted",
-            fillcolor="green",
-            opacity=0.6,
-            hovertemplate="<b>Date</b>: %{x}<br><b>Eligible (Not promoted)</b>: %{y}<extra></extra>"
+            name="Promoted",
+            fillcolor="gold",
+            hovertemplate="<b>Date</b>: %{x}<br><b>Promoted</b>: %{y}<extra></extra>",
         )
     )
 
@@ -391,7 +411,7 @@ def update_graphs(
         title="Historical Soldier Selection",
         xaxis_title="Date",
         yaxis_title="# of Soldiers",
-        legend=dict(traceorder="normal")
+        showlegend=True,
     )
 
     # Gauges

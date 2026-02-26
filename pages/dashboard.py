@@ -561,7 +561,7 @@ If the Army alters their format, you will see discrepancies until I update the l
                                 [
                                     html.Div(dcc.Graph(id="competitiveness-graph"), style={"flex": "1", "minHeight": "0"}),
                                     html.P(
-                                        "This graph shows the ratio of promotions to eligible soldiers. A higher score indicates a less competitive MOS with more promotions relative to those eligible.",
+                                        "This graph shows the ratio of promotions to eligible soldiers. The higher the score the less competitive.",
                                         id="competitiveness-text",
                                         style={"textAlign": "center", "fontSize": "14px", "marginBottom": "0"},
                                     ),
