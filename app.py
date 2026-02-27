@@ -374,8 +374,7 @@ def update_graphs(
 
     promoted = np.minimum(promoted, eligible)
     not_promoted = np.maximum(eligible - promoted, 0)
-    print("PROMOTED NONZERO COUNT", int((promoted > 0).sum()))
-    print("EXAMPLE ROWS", list(zip(filtered_df["Date"].dt.strftime("%b-%Y"), eligible, promoted, not_promoted))[:15])
+
 
     fig4 = go.Figure()
 

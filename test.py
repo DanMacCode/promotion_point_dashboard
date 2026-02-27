@@ -264,7 +264,19 @@ def update_graphs(
     # copied exactly from your working version...
     empty_fig = px.line(title="No Data Available")
     if not n_clicks or not start_month or not end_month or not rank or not mos or not component:
-        return [empty_fig] * 6 + ["", "", "", ""]
+        return (
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            "",
+            "",
+            "",
+            "",
+            "",
+        )
 
     filtered_df = df.copy()
     filtered_df["Date"] = pd.to_datetime(filtered_df["Date"], format="%Y-%b", errors="coerce")
@@ -281,7 +293,19 @@ def update_graphs(
     if mos:
         filtered_df = filtered_df[filtered_df["MOS"] == mos]
     if filtered_df.empty:
-        return [empty_fig] * 6 + ["", "", "", ""]
+        return (
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            "",
+            "",
+            "",
+            "",
+            "",
+        )
 
     promotion_column = "Cutoff_SGT" if rank == "SGT" else "Cutoff_SSG"
     promotions_col = "Promotions_SGT" if rank == "SGT" else "Promotions_SSG"
@@ -355,35 +379,55 @@ def update_graphs(
     fig3 = px.bar(filtered_df, x="Date", y="Competitiveness", title="Competitiveness Score",
                   color_discrete_sequence=["green"])
 
-    # Streamgraph
-    filtered_df["Not_Promoted"] = (filtered_df[eligibles_col] - filtered_df[promotions_col]).clip(lower=0)
+    eligible_raw = filtered_df[eligibles_col]
+    promoted_raw = filtered_df[promotions_col]
+
+    eligible = (
+        eligible_raw.astype(str)
+        .str.replace(r"[^\d\.\-]", "", regex=True)
+        .replace("", "0")
+        .astype(float)
+    )
+
+    promoted = (
+        promoted_raw.astype(str)
+        .str.replace(r"[^\d\.\-]", "", regex=True)
+        .replace("", "0")
+        .astype(float)
+    )
+
+    promoted = np.minimum(promoted, eligible)
+    not_promoted = np.maximum(eligible - promoted, 0)
+
     fig4 = go.Figure()
 
-    # First: Promoted
+    # 1) Yellow promoted on the bottom
     fig4.add_trace(
         go.Scatter(
             x=filtered_df["Date"],
-            y=filtered_df[promotions_col],
+            y=promoted,
+            mode="lines",
+            line=dict(width=0, color="gold"),
+            stackgroup="one",
             fill="tozeroy",
-            mode="none",
             name="Promoted",
             fillcolor="gold",
-            opacity=0.9,
-            hovertemplate="<b>Date</b>: %{x}<br><b>Promoted</b>: %{y}<extra></extra>"
+            hovertemplate="<b>Date</b>: %{x}<br><b>Promoted</b>: %{y}<extra></extra>",
         )
     )
 
-    # Second: Eligible (stacked *on top* of Promoted)
+    # 2) Green not promoted stacked above it
     fig4.add_trace(
         go.Scatter(
             x=filtered_df["Date"],
-            y=filtered_df["Not_Promoted"],
+            y=not_promoted,
+            mode="lines",
+            line=dict(width=0, color="green"),
+            stackgroup="one",
             fill="tonexty",
-            mode="none",
             name="Eligible not Promoted",
             fillcolor="green",
-            opacity=0.6,
-            hovertemplate="<b>Date</b>: %{x}<br><b>Eligible (Not promoted)</b>: %{y}<extra></extra>"
+            hovertemplate="<b>Date</b>: %{x}<br><b>Eligible not Promoted</b>: %{y}<extra></extra>",
         )
     )
 
@@ -391,15 +435,7 @@ def update_graphs(
         title="Historical Soldier Selection",
         xaxis_title="Date",
         yaxis_title="# of Soldiers",
-        legend=dict(
-            orientation="h",
-            x=0.5,
-            xanchor="center",
-            y=-0.25,
-            yanchor="top",
-            traceorder="normal",
-        ),
-        margin=dict(t=60, r=20, l=40, b=95),
+        showlegend=True,
     )
 
     # Gauges
