@@ -4,7 +4,7 @@ from dash import html, dcc
 import pandas as pd
 import requests
 import dash_bootstrap_components as dbc
-
+from data_loader import load_master_df, get_sorted_dates
 from dash import Input, Output, callback
 
 from dashboard_scripts.update_change_graph import create_change_graph
@@ -13,18 +13,9 @@ from dashboard_scripts.predict_next_promotion import predict_next_promotion_poin
 from dashboard_scripts.calculate_promotion_percentage import calculate_promotion_percentage
 
 dash.register_page(__name__, path="/", name="Home", order=0)
+df = load_master_df()
+sorted_dates = get_sorted_dates(df)
 
-csv_url = "https://raw.githubusercontent.com/DanMacCode/promotion_point_dashboard/main/data/master/master_promotion_data.csv"
-try:
-    df = pd.read_csv(csv_url)
-except Exception:
-    df = pd.DataFrame()
-
-if not df.empty and "Date" in df.columns:
-    df["Date"] = pd.to_datetime(df["Date"], format="%Y-%b", errors="coerce")
-    sorted_dates = df["Date"].dropna().sort_values().dt.strftime("%b-%Y").unique().tolist()
-else:
-    sorted_dates = []
 
 coming_soon_url = "https://raw.githubusercontent.com/DanMacCode/promotion_point_dashboard/refs/heads/main/data/master/coming_soon.md"
 try:

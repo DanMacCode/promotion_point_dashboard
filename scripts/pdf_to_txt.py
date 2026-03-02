@@ -1,28 +1,35 @@
 import os
+from pathlib import Path
 import pdfplumber
 
-# Define directories
-PDF_DIR = "../data/pdfs/"
-TXT_DIR = "../data/txt/"
-os.makedirs(TXT_DIR, exist_ok=True)
+# Anchor paths to the repo root so this works locally and in Railway
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PDF_DIR = PROJECT_ROOT / "data" / "pdfs"
+TXT_DIR = PROJECT_ROOT / "data" / "txt"
 
-# Function to convert PDFs to TXT
-def convert_pdf_to_txt(pdf_filename):
-    pdf_path = os.path.join(PDF_DIR, pdf_filename)
+PDF_DIR.mkdir(parents=True, exist_ok=True)
+TXT_DIR.mkdir(parents=True, exist_ok=True)
+
+def convert_pdf_to_txt(pdf_filename: str) -> Path:
+    pdf_path = PDF_DIR / pdf_filename
     txt_filename = pdf_filename.replace(".pdf", ".txt")
-    txt_path = os.path.join(TXT_DIR, txt_filename)
+    txt_path = TXT_DIR / txt_filename
 
-    with pdfplumber.open(pdf_path) as pdf:
-        text = "\n".join([page.extract_text() for page in pdf.pages if page.extract_text()])
+    with pdfplumber.open(str(pdf_path)) as pdf:
+        text = "\n".join(
+            [page.extract_text() for page in pdf.pages if page.extract_text()]
+        )
 
-    with open(txt_path, "w", encoding="utf-8") as f:
-        f.write(text)
+    txt_path.write_text(text, encoding="utf-8")
 
-    print(f"Converted {pdf_filename} → {txt_filename}")
     return txt_path
 
-# Process all PDFs
+
 if __name__ == "__main__":
-    for pdf_file in os.listdir(PDF_DIR):
-        if pdf_file.endswith(".pdf"):
-            convert_pdf_to_txt(pdf_file)
+    pdf_files = [f for f in PDF_DIR.iterdir() if f.is_file() and f.suffix.lower() == ".pdf"]
+    total = len(pdf_files)
+
+    for i, pdf_file in enumerate(pdf_files, start=1):
+        convert_pdf_to_txt(pdf_file.name)
+        percent = (i / total) * 100 if total else 100
+        print(f"Converted {pdf_file.name} | {percent:.2f}% complete")

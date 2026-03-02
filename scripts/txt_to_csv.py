@@ -1,11 +1,13 @@
 import os
 import re
 import pandas as pd
+from pathlib import Path
 
 # Define directories
-TXT_DIR = "../data/txt/"
-CSV_DIR = "../data/csv/"
-os.makedirs(CSV_DIR, exist_ok=True)
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+TXT_DIR = PROJECT_ROOT / "data" / "txt"
+CSV_DIR = PROJECT_ROOT / "data" / "csv"
+CSV_DIR.mkdir(parents=True, exist_ok=True)
 
 # Function to extract promotion data from a TXT file
 def extract_promotion_data(txt_path):
@@ -50,17 +52,17 @@ def extract_promotion_data(txt_path):
 
     # Save CSV with proper naming convention
     csv_filename = os.path.basename(txt_path).replace(".txt", ".csv")
-    csv_path = os.path.join(CSV_DIR, csv_filename)
+    csv_path = CSV_DIR / csv_filename
     df.to_csv(csv_path, index=False)
     print(f"Extracted and saved: {csv_filename}")
 
-    return csv_path
+    return str(csv_path)
 
 # process all txt files
 def process_all_txt_files():
     for txt_filename in os.listdir(TXT_DIR):
         if txt_filename.endswith(".txt"):
-            extract_promotion_data(os.path.join(TXT_DIR, txt_filename))
+            extract_promotion_data(str(TXT_DIR / txt_filename))
 
 if __name__ == "__main__":
     process_all_txt_files()

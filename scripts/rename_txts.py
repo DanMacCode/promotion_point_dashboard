@@ -2,9 +2,9 @@ import os
 import re
 from pathlib import Path
 
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-TXT_DIR = Path("../data/txt").resolve()
+# Anchor to project root instead of using chdir + ../
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+TXT_DIR = PROJECT_ROOT / "data" / "txt"
 
 MONTH_MAP = {
     "JANUARY": "JAN",
@@ -26,6 +26,8 @@ ALREADY_RENAMED_RE = re.compile(
     r"^(ACTIVE|RESERVE)_[A-Z]{3}_[0-9]{2}(_\d+)?\.txt$",
     re.IGNORECASE,
 )
+
+# --- Everything below this line is unchanged ---
 
 
 def generate_unique_filename(directory: Path, base_name: str) -> str:
@@ -80,15 +82,12 @@ def find_subject_line(lines: list[str]) -> str | None:
 
 
 def should_skip_file(subject_line: str | None, content_upper: str, filename_upper: str) -> bool:
-    # Hard excludes for non monthly cutoff series material
     if "PROMOTION TREND REPORT" in content_upper:
         return True
 
-    # Also skip things that look like special reports by filename
     if "TREND_REPORT" in filename_upper:
         return True
 
-    # Skip standalone "Promotion Point Changes" docs, but NOT cutoff memos that merely mention it in reminders
     subject_upper = subject_line.upper() if subject_line else ""
     if "PROMOTION_POINT_CHANGES" in filename_upper:
         return True
@@ -99,15 +98,6 @@ def should_skip_file(subject_line: str | None, content_upper: str, filename_uppe
 
 
 def determine_component(subject_line: str | None, content_upper: str, filename_upper: str) -> str | None:
-    """
-    Robust rule set (ordered by reliability):
-      1) SUBJECT line classification (highest trust)
-      2) Filename hints (AC vs AGR)
-      3) Content markers specific to the COS tables
-      4) As a last resort, content indicators (lowest trust)
-
-    Always treat AGR as RESERVE.
-    """
     subject_upper = subject_line.upper() if subject_line else ""
 
     reserve_subject_indicators = [
@@ -125,30 +115,22 @@ def determine_component(subject_line: str | None, content_upper: str, filename_u
         "ACTIVE COMPONENT",
     ]
 
-    # 1) SUBJECT line first (most accurate)
     if subject_upper:
-        # AGR is always Reserve
         if any(ind in subject_upper for ind in reserve_subject_indicators):
             return "RESERVE"
         if any(ind in subject_upper for ind in active_subject_indicators):
             return "ACTIVE"
 
-    # 2) Filename hints (common in scraped names like "*-AC-Cutoff-Scores*" or "*-AGR-Cutoff-Scores*")
-    # Treat AGR as Reserve
     if "AGR" in filename_upper or "-AGR-" in filename_upper or "_AGR_" in filename_upper:
         return "RESERVE"
-    # AC commonly means Active Component
     if "-AC-" in filename_upper or "_AC_" in filename_upper or "AC-CUTOFF-SCORES" in filename_upper:
         return "ACTIVE"
 
-    # 3) COS table section markers
     if "AGR PROMOTION QUALIFICATION SCORES" in content_upper:
         return "RESERVE"
     if "AA PROMOTION QUALIFICATION SCORES" in content_upper:
         return "ACTIVE"
 
-    # 4) Last resort: scan content, but DO NOT let a stray Reserve mention override everything.
-    # If both appear in content, refuse to guess.
     reserve_content_indicators = [
         "ACTIVE GUARD RESERVE",
         "UNITED STATES ARMY RESERVE",
@@ -176,14 +158,6 @@ def determine_component(subject_line: str | None, content_upper: str, filename_u
 
 
 def extract_month_year_from_subject(subject_line: str) -> tuple[str | None, str | None]:
-    """
-    Prefer the effective month and year.
-    Handles:
-      - for 01 December 2025
-      - for 1 April 2025
-      - for December 2025
-      - for the month of December 2025
-    """
     s = subject_line.strip()
 
     patterns = [
@@ -204,15 +178,8 @@ def extract_month_year_from_subject(subject_line: str) -> tuple[str | None, str 
 
 
 def extract_month_year_from_filename(filename: str) -> tuple[str | None, str | None]:
-    """
-    Useful fallbacks:
-      - HQDA_COS_as_of_20_NOV_2025 -> NOV 2025
-      - HQDA_COS_-_2026-02_-_as_of_20_JAN_2026 -> 2026-02
-      - August-2023-AC-Cutoff-Scores -> AUG 2023
-    """
     base = Path(filename).stem.upper()
 
-    # YYYY-MM pattern (avoid \b because "_" is a word character)
     m = re.search(r"(?<!\d)(\d{4})[\-_ ](\d{2})(?!\d)", base)
     if m:
         year = m.group(1)
@@ -223,7 +190,6 @@ def extract_month_year_from_filename(filename: str) -> tuple[str | None, str | N
             ]
             return month_abbrev, year
 
-    # Month-name + YYYY (e.g., AUGUST-2023 or Aug-2023)
     m = re.search(r"(?<![A-Z])([A-Z]{3,9})[\-_ ]+(\d{4})(?!\d)", base)
     if m:
         mon = normalize_month_to_abbrev(m.group(1))
@@ -260,13 +226,11 @@ def rename_txt_file(txt_path: Path) -> Path:
         print(f"[SKIP] Could not determine component (ACTIVE/RESERVE) for {txt_path.name}")
         return txt_path
 
-    # Prefer effective month/year from SUBJECT
     mon_abbrev = None
     year_4 = None
     if subject_line:
         mon_abbrev, year_4 = extract_month_year_from_subject(subject_line)
 
-    # Fallback to filename parsing
     if not mon_abbrev or not year_4:
         mon_abbrev, year_4 = extract_month_year_from_filename(txt_path.name)
 

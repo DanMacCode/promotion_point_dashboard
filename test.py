@@ -7,6 +7,8 @@ import requests
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
+from pathlib import Path
+from data_loader import load_master_df, get_sorted_dates
 
 from dashboard_scripts.update_change_graph import create_change_graph
 from dashboard_scripts.bayesian_adjustment import compute_bayesian_promotion_probability
@@ -30,17 +32,8 @@ server = app.server
 app.title = "Army Promotion Point Dashboard"
 
 # ── Load your master CSV and Coming Soon text ──────────────────
-csv_url = (
-    "https://raw.githubusercontent.com/"
-    "DanMacCode/promotion_point_dashboard/main/data/master/master_promotion_data.csv"
-)
-try:
-    df = pd.read_csv(csv_url)
-except Exception:
-    df = pd.DataFrame()
-
-df["Date"] = pd.to_datetime(df["Date"], format="%Y-%b", errors="coerce")
-sorted_dates = df["Date"].dropna().sort_values().dt.strftime("%b-%Y").unique().tolist()
+df = load_master_df()
+sorted_dates = get_sorted_dates(df)
 
 coming_soon_url = (
     "https://raw.githubusercontent.com/DanMacCode/"

@@ -1,20 +1,22 @@
 import os
 import pandas as pd
+from pathlib import Path
 
 # Define directories
-CSV_DIR = "../data/csv/"
-MASTER_DIR = "../data/master/"
-os.makedirs(MASTER_DIR, exist_ok=True)
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+CSV_DIR = PROJECT_ROOT / "data" / "csv"
+MASTER_DIR = PROJECT_ROOT / "data" / "master"
+MASTER_DIR.mkdir(parents=True, exist_ok=True)
 
 # Master dataset output path
-MASTER_FILE = os.path.join(MASTER_DIR, "master_promotion_data.csv")
+MASTER_FILE = MASTER_DIR / "master_promotion_data.csv"
 
 def compile_all_csvs():
     all_data = []
 
     for csv_filename in os.listdir(CSV_DIR):
         if csv_filename.endswith(".csv"):
-            csv_path = os.path.join(CSV_DIR, csv_filename)
+            csv_path = CSV_DIR / csv_filename
             df = pd.read_csv(csv_path)
             all_data.append(df)
 

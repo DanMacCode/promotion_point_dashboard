@@ -4,14 +4,18 @@ import re
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import time
+from pathlib import Path
+
+from pathlib import Path
 
 print("[INFO] Waiting 2 seconds to avoid request spike...")
 time.sleep(2)
 
 # Define constants
 BASE_URL = "https://www.ncoonfire.com/enlisted-cutoff-scores"
-PDF_DIR = "../data/pdfs/"
-os.makedirs(PDF_DIR, exist_ok=True)
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PDF_DIR = PROJECT_ROOT / "data" / "pdfs"
+PDF_DIR.mkdir(parents=True, exist_ok=True)
 
 # Function to extract the year and month from filenames
 def extract_year_month(filename):
@@ -41,7 +45,6 @@ def get_promotion_pdfs():
 
     return pdf_links
 
-# Function to download PDFs
 def download_pdfs():
     pdf_links = get_promotion_pdfs()
     if not pdf_links:
@@ -58,14 +61,16 @@ def download_pdfs():
                 print(f"[INFO] Skipping (Before Aug 2023): {filename}")
                 continue
 
-        file_path = os.path.join(PDF_DIR, filename)
+        file_path = PDF_DIR / filename
+        if file_path.exists():
+            print(f"[INFO] Already exists, skipping: {filename}")
+            continue
 
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
             response = requests.get(pdf_url, headers=headers, timeout=10)
             if response.status_code == 200:
-                with open(file_path, "wb") as f:
-                    f.write(response.content)
+                file_path.write_bytes(response.content)
                 print(f"[SUCCESS] Downloaded: {filename}")
             else:
                 print(f"[WARN] Failed to download {pdf_url} (Status: {response.status_code})")

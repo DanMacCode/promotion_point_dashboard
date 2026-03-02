@@ -7,6 +7,8 @@ import requests
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
+from pathlib import Path
+from data_loader import load_master_df, get_sorted_dates
 
 from dashboard_scripts.update_change_graph import create_change_graph
 from dashboard_scripts.bayesian_adjustment import compute_bayesian_promotion_probability
@@ -30,17 +32,8 @@ server = app.server
 app.title = "Army Promotion Point Dashboard"
 
 # ── Load your master CSV and Coming Soon text ──────────────────
-csv_url = (
-    "https://raw.githubusercontent.com/"
-    "DanMacCode/promotion_point_dashboard/main/data/master/master_promotion_data.csv"
-)
-try:
-    df = pd.read_csv(csv_url)
-except Exception:
-    df = pd.DataFrame()
-
-df["Date"] = pd.to_datetime(df["Date"], format="%Y-%b", errors="coerce")
-sorted_dates = df["Date"].dropna().sort_values().dt.strftime("%b-%Y").unique().tolist()
+df = load_master_df()
+sorted_dates = get_sorted_dates(df)
 
 coming_soon_url = (
     "https://raw.githubusercontent.com/DanMacCode/"
@@ -264,7 +257,19 @@ def update_graphs(
     # copied exactly from your working version...
     empty_fig = px.line(title="No Data Available")
     if not n_clicks or not start_month or not end_month or not rank or not mos or not component:
-        return [empty_fig] * 6 + ["", "", "", ""]
+        return (
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            "",
+            "",
+            "",
+            "",
+            "",
+        )
 
     filtered_df = df.copy()
     filtered_df["Date"] = pd.to_datetime(filtered_df["Date"], format="%Y-%b", errors="coerce")
@@ -281,7 +286,19 @@ def update_graphs(
     if mos:
         filtered_df = filtered_df[filtered_df["MOS"] == mos]
     if filtered_df.empty:
-        return [empty_fig] * 6 + ["", "", "", ""]
+        return (
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            empty_fig,
+            "",
+            "",
+            "",
+            "",
+            "",
+        )
 
     promotion_column = "Cutoff_SGT" if rank == "SGT" else "Cutoff_SSG"
     promotions_col = "Promotions_SGT" if rank == "SGT" else "Promotions_SSG"
@@ -375,34 +392,35 @@ def update_graphs(
     promoted = np.minimum(promoted, eligible)
     not_promoted = np.maximum(eligible - promoted, 0)
 
-
     fig4 = go.Figure()
 
-    fig4.add_trace(
-        go.Scatter(
-            x=filtered_df["Date"],
-            y=not_promoted,
-            mode="lines",
-            line=dict(width=0),
-            stackgroup="one",
-            fill="tozeroy",
-            name="Eligible not Promoted",
-            fillcolor="green",
-            hovertemplate="<b>Date</b>: %{x}<br><b>Eligible not Promoted</b>: %{y}<extra></extra>",
-        )
-    )
-
+    # 1) Yellow promoted on the bottom
     fig4.add_trace(
         go.Scatter(
             x=filtered_df["Date"],
             y=promoted,
             mode="lines",
-            line=dict(width=0),
+            line=dict(width=0, color="gold"),
             stackgroup="one",
-            fill="tonexty",
+            fill="tozeroy",
             name="Promoted",
             fillcolor="gold",
             hovertemplate="<b>Date</b>: %{x}<br><b>Promoted</b>: %{y}<extra></extra>",
+        )
+    )
+
+    # 2) Green not promoted stacked above it
+    fig4.add_trace(
+        go.Scatter(
+            x=filtered_df["Date"],
+            y=not_promoted,
+            mode="lines",
+            line=dict(width=0, color="green"),
+            stackgroup="one",
+            fill="tonexty",
+            name="Eligible not Promoted",
+            fillcolor="green",
+            hovertemplate="<b>Date</b>: %{x}<br><b>Eligible not Promoted</b>: %{y}<extra></extra>",
         )
     )
 
